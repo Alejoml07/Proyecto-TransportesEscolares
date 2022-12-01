@@ -1,0 +1,52 @@
+{%extends "transportes/base.html"%}
+{% load static %}
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulario Vehiculo</title>
+</head>
+<body>
+    {%block contenedor%}
+    <h3>Agregar Vehiculo</h3>
+    <form action="{%url 'transportes:guardarVehiculo'%}" method="post">
+        {%csrf_token%}
+
+        <div class="mb-3 mt-3">
+          <label>Cliente</label>
+          <select class="form-control" name="cliente">
+              <option value="">Seleccione:</option>
+              {% for c in cliente %}
+                  <option value="{{ c.id }}" >{{ c.id}} - {{ c.nombre }}</option>
+              {% endfor %}
+          </select>
+        </div>
+       
+          <div class="mb-3 mt-3">
+            
+            <label for="" class="form-label">placa:</label>
+            <input type="text" class="form-control" id="" placeholder="Ingrese " name="placa">
+          </div>
+          <div class="mb-3 mt-3">
+            <label for="" class="form-label">marca:</label>
+            <input type="text" class="form-control" id="" placeholder="Ingrese " name="marca">
+          </div>
+          <div class="mb-3 mt-3">
+            <label for="" class="form-label">color:</label>
+            <input type="text" class="form-control" id="" placeholder="Ingrese " name="color">
+          </div>
+          <label>Foto</label>
+          <input type="file" name="foto" class="form-control" accept="image/*" /><br>
+          
+         
+        
+        <button type="submit" class="btn btn-primary">Enviar</button>
+      </form>
+      {%endblock%}
+      
+</body>
+</html>

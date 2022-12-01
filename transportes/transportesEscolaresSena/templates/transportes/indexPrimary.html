@@ -1,0 +1,182 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transportes Escolares</title>
+    <link href="{% static 'transportes/css/bootstrap.min.css' %}" rel="stylesheet">
+    <link href="{% static 'transportes/css/styleIndex.css' %}" rel="stylesheet">
+</head>
+<body>
+  <header>
+  <nav class="navbar navbar-expand-lg navbar-light">
+    <div class="container">
+      <a class="navbar-brand" href="{% url 'transportes:indexPrimary' %}">Logoooo</a>
+      <button class="navbar-toggler bg-white" type="button" data-toggle="collapse" data-bs-target="#miLista">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse justify-content-end" id="miLista">
+        <ul class="navbar-nav">
+          <li class="nav-item mb-3">
+            <a class="nav-link text-white" href="">Principal</a>
+          </li>
+          <li class="nav-item mb-3">
+            <a class="nav-link text-white" href="">Nosotros</a>
+          </li>
+          <li class="nav-item mb-3">
+            <a class="nav-link text-white" href="">Servicios</a>
+          </li>
+          <li class="nav-item mb-3">
+            <a class="nav-link text-white" href="">Contacto</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+  <div class="container">
+    <div class="title font-weight-bold">
+        Servicios Disponibles<br>registrate ahora!<br>
+        <a class="btn mt-3" href="{% url 'transportes:registrarUsuario' %}">Registrate ahora</a>
+        <a class="btn mt-3" href="{% url 'transportes:login' %}" >Iniciar Sesion</a>
+    </div>
+</div>
+</header>
+    <main>
+        <div class="row py-5" id="row-nosotros">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-5 text-center">
+                        <img src="assets/img4.png" alt="Atleta">
+                    </div>
+                    <div class="col-md-7 mt-4">
+                        <h1 class="font-weight-bold title-color mb-3">Sobre Nosotros</h1>
+                        <p>Zombie ipsum reversus ab viral inferno, nam rick grimes malum cerebro. De carne lumbering
+                            animata corpora quaeritis. Summus brains sit​​, morbo vel maleficia? De apocalypsi gorger
+                            omero undead survivor dictum mauris. Hi mindless mortuis soulless creaturas, imo evil
+                            stalking monstra adventus resi dentevil vultus comedat cerebella viventium. Qui animated
+                            corpse.</p>
+                        <p>Zombie ipsum reversus ab viral inferno, nam rick grimes malum cerebro. De carne lumbering
+                            animata corpora quaeritis. Summus brains sit​​, morbo vel maleficia? De apocalypsi gorger
+                            omero undead survivor dictum mauris. Hi mindless mortuis soulless creaturas, imo evil
+                            stalking monstra adventus resi dentevil vultus comedat cerebella viventium. Qui animated
+                            corpse.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row" id="row-datos">
+            <div class="container">
+                <div class="row text-center">
+                    <div class="col">
+                        <div class="mx-auto circulo d-flex justify-content-center align-items-center">
+                            <h1 class="font-weight-bold title-color">20</h1>
+                        </div>
+                        <h5 class="font-weight-bold mt-3 text-white">PISCINAS</h5>
+                    </div>
+                    <div class="col">
+                        <div class="mx-auto circulo d-flex justify-content-center align-items-center">
+                            <h1 class="font-weight-bold title-color">55</h1>
+                        </div>
+                        <h5 class="font-weight-bold mt-3 text-white">ENTRENADORES</h5>
+                    </div>
+                    <div class="col">
+                        <div class="mx-auto circulo d-flex justify-content-center align-items-center">
+                            <h1 class="font-weight-bold title-color">11</h1>
+                        </div>
+                        <h5 class="font-weight-bold mt-3 text-white">OLIMPIADAS</h5>
+                    </div>
+                    <div class="col">
+                        <div class="mx-auto circulo d-flex justify-content-center align-items-center">
+                            <h1 class="font-weight-bold title-color">33</h1>
+                        </div>
+                        <h5 class="font-weight-bold mt-3 text-white">PREMIOS</h5>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row" id="row-servicios">
+            <div class="container">
+                <div class="row flex-row-reverse">
+                    <div class="col-md-5 text-center">
+                        <img src="assets/img5.png" alt="Atleta">
+                    </div>
+                    <div class="col-md-7 mt-4">
+                        <h1 class="font-weight-bold title-color mb-3">Nuestros Servicios</h1>
+                        <p>Zombie ipsum reversus ab viral inferno, nam rick grimes malum cerebro. De carne lumbering
+                            animata corpora quaeritis. Summus brains sit​​, morbo vel maleficia? De apocalypsi gorger
+                            omero undead survivor dictum mauris. Hi mindless mortuis soulless creaturas, imo evil
+                            stalking monstra adventus resi dentevil vultus comedat cerebella viventium. Qui animated
+                            corpse.</p>
+                        <p>Zombie ipsum reversus ab viral inferno, nam rick grimes malum cerebro. De carne lumbering
+                            animata corpora quaeritis. Summus brains sit​​, morbo vel maleficia? De apocalypsi gorger
+                            omero undead survivor dictum mauris. Hi mindless mortuis soulless creaturas, imo evil
+                            stalking monstra adventus resi dentevil vultus comedat cerebella viventium. Qui animated
+                            corpse.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row" id="row-contacto">
+            <div class="container text-center">
+                <div class="col-md-6 mx-auto">
+                    <h1 class="title-color font-weight-bold">Contacto</h1>
+                    <h5 class="mt-4">Zombie ipsum reversus ab viral inferno, nam rick grimes malum cerebro. De carne
+                        lumbering animata corpora quaeritis. Summus brains sit​​.</h5>
+                    <div class="input-group mt-5">
+                        <input class="form-control" type="text" placeholder="Email">
+                        <button class="btn">Enviar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+<footer>
+<div class="row text-white">
+    <div class="container">
+        <div class="row gy-5">
+            <div class="col-lg-4 px-5">
+                <h4 class="font-weight-bold mb-4">NOSOTROS</h4>
+                <p>Zombie ipsum reversus ab viral inferno, nam rick grimes malum cerebro. De carne lumbering
+                    animata corpora quaeritis. Summus brains sit​​.</p>
+            </div>
+            <div class="col-lg-4 px-5">
+                <h4 class="font-weight-bold mb-4">CREDITOS</h4>
+                <a href="https://www.freepik.com/free-photos-vectors/water">Water psd created by freepik -
+                    www.freepik.com</a>
+            </div>
+            <div class="col-lg-4 px-5">
+                <h4 class="font-weight-bold mb-4">CONTACTANOS</h4>
+                <div class="d-flex">
+                    <span class="material-icons">
+                        local_phone
+                    </span>
+                    <p class="ml-3">(01) 555 5555</p>
+                </div>
+                <div class="d-flex">
+                    <span class="material-icons">
+                        house
+                    </span>
+                    <p class="ml-3">Jr. lorem ipsum #777</p>
+                </div>
+                <div class="d-flex">
+                    <span class="material-icons">
+                        email
+                    </span>
+                    <p class="ml-3">andygeek@andygeek.com</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</footer>
+    
+  
+  <script src="{% static 'transportes/js/popper.min.js' %}"></script>
+  <script src="{% static 'transportes/js/bootstrap.min.js' %}"></script>
+  <script src="{% static 'transportes/js/libreria.js' %}"></script>
+
+      
+</body>
+</html>

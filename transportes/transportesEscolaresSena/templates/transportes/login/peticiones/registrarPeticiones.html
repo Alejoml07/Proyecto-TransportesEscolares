@@ -1,0 +1,59 @@
+{%extends "transportes/base.html"%}
+{% load static %}
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulario Usuario</title>
+</head>
+<body>
+    {%block contenedor%}
+    <h3>Agregar Peticiones</h3>
+    <form action="{%url 'transportes:guardarPeticiones'%}" method="post">
+        {%csrf_token%}
+        <div class="mb-3 mt-3">
+          <label>Cliente</label>
+          <select class="form-control" name="cliente">
+              <option value="">Seleccione:</option>
+              {% for c in cli %}
+                  <option value="{{ c.id }}">{{ c.id}} - {{ c.nombre }}</option>
+              {% endfor %}
+          </select>
+        </div>
+        <div class="mb-3 mt-3">
+          <label>Servicios</label>
+          <select class="form-control" name="servicios">
+              <option value="">Seleccione:</option>
+              {% for c in servicios %}
+                  <option value="{{ c.id }}">{{ c.id}} - {{ c.nombre }}</option>
+              {% endfor %}
+          </select>
+          </div>
+          <div class="mb-3 mt-3">
+            <label for="" class="form-label">direccion:</label>
+            <input type="text" class="form-control" id="email" placeholder="Ingrese direccion" name="direccion">
+          </div>
+          <div class="mb-3 mt-3">
+            <label for="" class="form-label">colegio:</label>
+            <input type="text" class="form-control" id="" placeholder="Ingrese colegio" name="colegio">
+          </div>
+          <div class="mb-3 mt-3">
+            <label for="" class="form-label">horario:</label>
+            <input type="text" class="form-control" id="" placeholder="Ingrese horario" name="horario">
+          </div>
+          <div class="mb-3 mt-3">
+            <label for="" class="form-label">Comentario adicional:</label>
+            <input type="text" class="form-control" id="" placeholder="Ingrese Comentario adicional" name="comentario_add">
+          </div>
+          
+        
+        <button type="submit" class="btn btn-primary">Enviar</button>
+      </form>
+      {%endblock%}
+      
+</body>
+</html>

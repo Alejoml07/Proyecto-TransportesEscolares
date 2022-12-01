@@ -1,0 +1,114 @@
+{%extends "transportes/base.html"%}
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Listar Beneficiario</title>
+    <link href="{% static 'transportes/css/bootstrap.min.css' %}" rel="stylesheet">
+
+</head>
+<body>
+    
+
+    {%block contenedor%}
+    <a class="btn btn-warning" href="{% url 'transportes:registrarBeneficiario' %}">Agregar</a>
+
+    {% if messages %}
+
+        {% for message in messages %}
+            <div class="alert alert-{%if message.tags%}{{message.tags}}{%else%}dark{%endif%}" role = "alert">{{message}}</div>
+        {% endfor %}
+
+    {% endif %}
+
+    {%if datosB%}
+        <form class="d-flex" role="search" action="{% url 'transportes:buscarBeneficiario' %}" method="post">
+            {% csrf_token %}
+            <input onkeyup="buscarProducto('{% url 'transportes:buscarBeneficiario' %}');" class="form-control" type="search" name="buscar" id="buscar">
+            
+        </form>
+        <div id="respuesta">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>cliente</th>
+                    <th>nombre</th>
+                    <th>apellido</th>
+                    <th>docuemnto</th>
+                    <th>fecha_nacimiento</th>
+                    <th>Operaciones</th>
+
+
+
+
+                </tr>
+            </thead>
+            <tbody>
+                {%for t in datosB %}
+                <tr>
+                    <td>{{t.id}}</td>
+                    <td>{{t.cliente}}</td>
+                    <td>{{t.nombre}}</td>
+                    <td>{{t.apellido}}</td>
+                    <td>{{t.documento}}</td>
+                    <td>{{t.fecha_nacimiento}}</td>
+                    <td>
+                        <div class="d-grid gap-2 d-md-block">
+                            <a class="btn btn-dark" href="{% url 'transportes:eliminarBeneficiario' t.id %}">Eliminar</a>
+
+                            <a class="btn btn-info" href="{% url 'transportes:formularioEditarBeneficiario' t.id %}">Editar</a>
+                        </div>
+                    </td>
+
+
+
+
+
+                </tr>
+                
+                {%endfor%}
+            </tbody>
+            
+        </table>
+        <p>Página {{ datosB.number }} de {{ datosB.paginator.num_pages }}.</p>
+        
+        <nav aria-label="...">
+            <ul class="pagination">
+              <li class="page-item {% if not datosB.has_previous %}disabled{% endif %}">
+                <a class="page-link" href="?page=1">&laquo;</a>
+              </li>
+              <li class="page-item {% if not datosB.has_previous %}disabled{% endif %}">
+                <a class="page-link" {% if datosB.has_previous %}href="?page={{ datosB.previous_page_number }}"{% endif %}>Anterior</a>
+              </li>
+              
+                {% for i in "x"|rjust:datosB.paginator.num_pages|make_list %}
+                    <li class="page-item {% if forloop.counter == datosB.number %}active{% endif %}" aria-current="page">
+                        <a class="page-link" href="?page={{ forloop.counter }}">{{ forloop.counter }}</a>
+                    </li>
+                {% endfor %}
+
+              <li class="page-item {% if not datosB.has_next %}disabled{% endif %}">
+                <a class="page-link" {% if datosB.has_next %}href="?page={{ datosB.next_page_number }}"{% endif %}>Siguiente</a>
+              </li>
+              <li class="page-item {% if not datosB.has_next %}disabled{% endif %}">
+                <a class="page-link" {% if datosB.has_next %}href="?page={{ datosB.paginator.num_pages }}"{% endif %}>&raquo;</a>
+              </li>
+            </ul>
+          </nav>
+
+
+    {%else%}
+        No hay datos...
+    {%endif%}
+
+    {%endblock%}
+
+
+ 
+    
+</body>
+</html>

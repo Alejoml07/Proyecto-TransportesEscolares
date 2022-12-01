@@ -1,0 +1,63 @@
+{%extends "transportes/base.html"%}
+{% load static %}
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulario Usuario</title>
+</head>
+<body>
+    {%block contenedor%}
+    <h3>Agregar Proveedor</h3>
+    <form action="{%url 'transportes:actualizarProveedores'%}" method="post">
+        {%csrf_token%}
+        <input type="hidden" name="id" value="{{ proveedores.id }}"/>
+
+        <div class="mb-3 mt-3">
+          <label for="" class="form-label">Nombre:</label>
+          <input type="text" class="form-control" id="" value="{{ proveedores.nombre }}" name="nombre">
+        </div>
+        <div class="mb-3 mt-3">
+            <label for="" class="form-label">Apellido:</label>
+            <input type="text" class="form-control" id="" value="{{ proveedores.apellido }}" name="apellido">
+          </div>
+          <div class="mb-3 mt-3">
+            <label for="" class="form-label">Correo:</label>
+            <input type="email" class="form-control" id="email" value="{{ proveedores.correo }}" name="correo">
+          </div>
+          <div class="mb-3 mt-3">
+            <label for="" class="form-label">Direccion:</label>
+            <input type="text" class="form-control" id="" value="{{ proveedores.direccion }}" name="direccion">
+          </div>
+          <div class="mb-3 mt-3">
+            <label for="" class="form-label">Documento:</label>
+            <input type="number" class="form-control" id="" value="{{ proveedores.documento }}" name="documento">
+          </div>
+          <div class="mb-3 mt-3">
+            <label for="" class="form-label">Fecha de Nacimiento:</label>
+            <input type="date" class="form-control" id="" value="{{ proveedores.fecha_nacimiento }}" name="fecha_nacimiento">
+          </div>
+          <div class="mb-3 mt-3">
+            <label for="" class="form-label">Marca del vehiculo:</label>
+            <input type="text" class="form-control" id="" value="{{ proveedores.marca_veh }}" name="marca_veh">
+          </div>
+          <div class="mb-3 mt-3">
+            <label for="" class="form-label">Color del vehiculo:</label>
+            <input type="text" class="form-control" id="" value="{{ proveedores.color_veh }}" name="color_veh">
+          </div>
+          <div class="mb-3 mt-3">
+            <label for="" class="form-label">Documentacion del Vehiculo:</label>
+            <input type="text" class="" id="" value="" name="documentacion_veh">
+          </div>
+          
+        
+        <button type="submit" class="btn btn-primary">Enviar</button>
+      </form>
+      {%endblock%}
+      
+</body>
+</html>

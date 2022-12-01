@@ -1,0 +1,111 @@
+{%extends "transportes/base.html"%}
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Listar Comentarios</title>
+    <link href="{% static 'transportes/css/bootstrap.min.css' %}" rel="stylesheet">
+
+</head>
+<body>
+    
+
+    {%block contenedor%}
+    <a class="btn btn-warning" href="{% url 'transportes:registrarComentarios' %}">Agregar</a>
+
+    {% if messages %}
+
+        {% for message in messages %}
+            <div class="alert alert-{%if message.tags%}{{message.tags}}{%else%}dark{%endif%}" role = "alert">{{message}}</div>
+        {% endfor %}
+
+    {% endif %}
+
+    {%if datosC%}
+        <form class="d-flex" role="search" action="{% url 'transportes:buscarComentarios' %}" method="post">
+            {% csrf_token %}
+            <input onkeyup="buscarProducto('{% url 'transportes:buscarComentarios' %}');" class="form-control" type="search" name="buscar" id="buscar">
+            
+        </form>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>cliente</th>
+                    <th>tipo</th>
+                    <th>descripcion</th>
+                    <th>Operaciones</th>
+
+                   
+
+
+
+                </tr>
+            </thead>
+            <tbody>
+                {%for t in datosC %}
+                <tr>
+                    <td>{{t.id}}</td>
+                    <td>{{t.cliente}}</td>
+                    <td>{{t.tipo}}</td>
+                    <td>{{t.desc}}</td>
+                    <td>
+                        <div class="d-grid gap-2 d-md-block">
+                            <a class="btn btn-dark" href="{% url 'transportes:eliminarComentarios' t.id %}">Eliminar</a>
+
+                            <a class="btn btn-info" href="{% url 'transportes:formularioEditarComentarios' t.id %}">Editar</a>
+                        </div>
+                    </td>
+                    
+
+
+                </tr>
+                
+                {%endfor%}
+            </tbody>
+            
+        </table>
+        <p>Página {{ datosC.number }} de {{ datosC.paginator.num_pages }}.</p>
+        
+        <nav aria-label="...">
+            <ul class="pagination">
+              <li class="page-item {% if not datosC.has_previous %}disabled{% endif %}">
+                <a class="page-link" href="?page=1">&laquo;</a>
+              </li>
+              <li class="page-item {% if not datosC.has_previous %}disabled{% endif %}">
+                <a class="page-link" {% if datosC.has_previous %}href="?page={{ datosC.previous_page_number }}"{% endif %}>Anterior</a>
+              </li>
+              
+                {% for i in "x"|rjust:datosC.paginator.num_pages|make_list %}
+                    <li class="page-item {% if forloop.counter == datosC.number %}active{% endif %}" aria-current="page">
+                        <a class="page-link" href="?page={{ forloop.counter }}">{{ forloop.counter }}</a>
+                    </li>
+                {% endfor %}
+
+              <li class="page-item {% if not datosC.has_next %}disabled{% endif %}">
+                <a class="page-link" {% if datosC.has_next %}href="?page={{ datosC.next_page_number }}"{% endif %}>Siguiente</a>
+              </li>
+              <li class="page-item {% if not datosC.has_next %}disabled{% endif %}">
+                <a class="page-link" {% if datosC.has_next %}href="?page={{ datosC.paginator.num_pages }}"{% endif %}>&raquo;</a>
+              </li>
+            </ul>
+          </nav>
+
+
+
+    {%else%}
+        No hay datos...
+    {%endif%}
+
+    {%endblock%}
+
+
+    <script src="{% static 'transportes/js/popper.min.js' %}"></script>
+    <script src="{% static 'transportes/js/bootstrap.min.js' %}"></script>
+
+    
+</body>
+</html>

@@ -1,0 +1,136 @@
+.container {
+    max-width: 1100px;
+}
+header {
+    background-image: url('../assets/fondo1.png');
+    background-size: cover;
+    height: 550px;
+    position: relative;
+}
+
+#base{
+
+   
+}
+.title-color{
+    color: #5080E5;
+}
+
+.title {
+    color: #5080E5;
+    font-size: 45px;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.btn {
+    background-color: #5080E5;
+    border-radius: 20px;
+    color: white;
+    font-weight: bold;
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+.logo{
+    width: 120px;
+}
+
+#row-cursos{
+    background-color: #5080E5;
+}
+
+.row{
+    margin: 0;
+}
+
+#row-cursos img{
+    border-radius: 50%;
+}
+
+#row-nosotros{
+    background-image: url('../assets/fondo2.png');
+    background-size: cover;
+    padding-top: 100px !important;
+    padding-bottom: 100px !important;
+}
+
+#row-nosotros{
+    background-image: url('../assets/fondo2.png');
+    background-size: cover;
+    padding-top: 100px !important;
+    padding-bottom: 100px !important;
+}
+#row-servicios{
+    background-image: url('../assets/fondo2.png');
+    background-size: cover;
+    padding-top: 100px !important;
+    padding-bottom: 100px !important;
+}
+
+#row-contacto{
+    background-image: url('../assets/fondo1.png');
+    background-size: cover;
+    padding-top: 140px !important;
+    padding-bottom: 140px !important;
+}
+
+#row-nosotros img{
+    border-radius: 50%;
+    width: 300px;
+}
+#row-servicios img{
+    border-radius: 50%;
+    width: 300px;
+}
+
+
+#row-nosotros p{
+    font-size: 14px;
+}
+
+#row-servicios p{
+    font-size: 14px;
+}
+
+
+#row-datos{
+    background-color: gray;
+    padding-top: 100px !important;
+    padding-bottom: 100px !important;
+}
+.circulo{
+    width: 140px;
+    height: 140px;
+    border-radius: 50%;
+    background-color: #B3FBFF;
+}
+
+.form-control{
+    border-radius: 50px;
+}
+
+footer{
+    background-color: black;
+    padding-top: 100px !important;
+    padding-bottom: 100px !important;
+}
+
+footer a{
+    text-decoration: none;
+    color: white;
+}
+
+@media(max-width:992px){
+    .navbar-nav{
+        background-color: #5080E5;
+        border-bottom-left-radius: 15px;
+        border-bottom-right-radius: 15px;    
+        padding-left: 20px;    
+    }
+}
+nav{
+    z-index: 100;
+}
+

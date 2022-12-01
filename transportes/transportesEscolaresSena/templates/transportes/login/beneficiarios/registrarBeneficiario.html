@@ -1,0 +1,53 @@
+{%extends "transportes/base.html"%}
+{% load static %}
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulario Usuario</title>
+</head>
+<body>
+    {%block contenedor%}
+    <h3>Agregar Usuario</h3>
+    <form action="{%url 'transportes:guardarBeneficiario'%}" method="post">
+        {%csrf_token%}
+
+        <div class="mb-3 mt-3">
+          <label>Cliente</label>
+          <select class="form-control" name="cliente">
+              <option value="">Seleccione:</option>
+              {% for c in cli %}
+                  <option value="{{ c.id }}" >{{ c.id}} - {{ c.nombre }}</option>
+              {% endfor %}
+          </select>
+        </div>
+       
+          <div class="mb-3 mt-3">
+            <label for="" class="form-label">nombre:</label>
+            <input type="text" class="form-control" id="" placeholder="Ingrese Nombre" name="nombre">
+          </div>
+          <div class="mb-3 mt-3">
+            <label for="" class="form-label">apellido:</label>
+            <input type="text" class="form-control" id="" placeholder="Ingrese Apellido" name="apellido">
+          </div>
+          <div class="mb-3 mt-3">
+            <label for="" class="form-label">documento:</label>
+            <input type="text" class="form-control" id="" placeholder="Ingrese Documento" name="documento">
+          </div>
+          <div class="mb-3 mt-3">
+            <label for="" class="form-label">Fecha de Nacimiento:</label>
+            <input type="date" class="form-control" id="" placeholder="Ingrese fecha de nacimiento" name="fecha_nacimiento">
+          </div>
+          
+         
+        
+        <button type="submit" class="btn btn-primary">Enviar</button>
+      </form>
+      {%endblock%}
+      
+</body>
+</html>

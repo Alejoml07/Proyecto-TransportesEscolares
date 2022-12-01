@@ -1,0 +1,49 @@
+{%extends "transportes/base.html"%}
+{% load static %}
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulario Usuario</title>
+</head>
+<body>
+    {%block contenedor%}
+    <h3>Agregar Usuario</h3>
+    <form action="{%url 'transportes:guardarUsuario'%}" method="post">
+        {%csrf_token%}
+        <div class="mb-3 mt-3">
+          <label for="" class="form-label">Nombre:</label>
+          <input type="text" class="form-control" id="" placeholder="Ingrese Nombre" name="nombre">
+        </div>
+        <div class="mb-3 mt-3">
+            <label for="" class="form-label">Apellido:</label>
+            <input type="text" class="form-control" id="" placeholder="Ingrese Apellido" name="apellido">
+          </div>
+          <div class="mb-3 mt-3">
+            <label for="" class="form-label">Correo:</label>
+            <input type="email" class="form-control" id="email" placeholder="Ingrese Correo" name="correo">
+          </div>
+          <div class="mb-3 mt-3">
+            <label for="" class="form-label">Direccion:</label>
+            <input type="text" class="form-control" id="" placeholder="Ingrese Direccion" name="direccion">
+          </div>
+          <div class="mb-3 mt-3">
+            <label for="" class="form-label">Documento:</label>
+            <input type="number" class="form-control" id="" placeholder="Ingrese Documento" name="documento">
+          </div>
+          <div class="mb-3 mt-3">
+            <label for="" class="form-label">Fecha de Nacimiento:</label>
+            <input type="date" class="form-control" id="" placeholder="Ingrese Direccion" name="fecha_nacimiento">
+          </div>
+          
+        
+        <button type="submit" class="btn btn-primary">Enviar</button>
+      </form>
+      {%endblock%}
+      
+</body>
+</html>

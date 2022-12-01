@@ -1,0 +1,56 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transportes Escolares</title>
+    <link href="{% static 'transportes/css/bootstrap.min.css' %}" rel="stylesheet">
+</head>
+<body>
+    <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+        <div class="container-fluid">
+          <a class="navbar-brand" href="#">Logo</a>
+        </div>
+    </nav><br><br><br>
+{% if messages %}
+    {% for message in messages %}
+    <div class="alert alert-{% if message.tags != 'error' %}{{ message.tags }}{% elif message.tags == 'error' %}danger{% endif %}"
+        role="alert">{{ message }}</div>
+    {% endfor %}
+{% endif %}
+
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card-group">
+            
+            <div class="card p-4">
+                <div class="card-header"><h1>Usuario</h1></div>
+                
+                <form action="{% url 'transportes:login' %}" method="post">
+                    {% csrf_token %}
+                    
+                    <div class="mb-3">
+                        <label for="usuario" class="form-label">Usuario</label>
+                        <input type="text" class="form-control" id="usuario" name="usuario">
+                    </div>
+                    <div class="mb-3">
+                        <label for="clave" class="form-label">Contraseña</label>
+                        <input type="password" class="form-control" id="clave" name="clave">
+                    </div>
+                    <button type="submit" class="btn btn-primary">Login</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="{% static 'transportes/js/popper.min.js' %}"></script>
+<script src="{% static 'transportes/js/bootstrap.min.js' %}"></script>
+<script src="{% static 'transportes/js/libreria.js' %}"></script>
+
+</body>
+
+</html>

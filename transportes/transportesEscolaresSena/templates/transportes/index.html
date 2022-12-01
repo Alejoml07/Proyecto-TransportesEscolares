@@ -1,0 +1,134 @@
+{%extends "transportes/base.html"%}
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Listar Usuario</title>
+    <link href="{% static 'transportes/css/bootstrap.min.css' %}" rel="stylesheet">
+
+</head>
+<body>
+   
+
+    {%block contenedor%}
+    
+    {% if messages %}
+
+        {% for message in messages %}
+            <div class="alert alert-{%if message.tags%}{{message.tags}}{%else%}dark{%endif%}" role = "alert">{{message}}</div>
+        {% endfor %}
+
+    {% endif %}
+
+    {%if datos%}
+        <br>
+        <form class="d-flex" role="search" action="{% url 'transportes:buscarProducto' %}" method="post">
+            {% csrf_token %}
+            <div class="container">
+            <h4>Buscar:</h4>
+            <input onkeyup="buscarProducto('{% url 'transportes:buscarProducto' %}');" class="form-control" type="search" name="buscar" id="buscar">
+            </div>
+        </form>
+        <div id="respuesta">
+        {%for t in datos %}
+        <div class="container">
+        <div class="card mb-3" style="max-width: 1200px; max-height: 1000px;" >
+            <div class="row g-0">
+              <div class="col-md-4">
+                <img src="..." class="img-fluid rounded-start" alt="...">
+              </div>
+              <div class="col-md-8">
+                <div class="card-body">
+                  <h5 class="card-title">{{t.nombre}} {{t.apellido}}</h5>
+                  <p class="card-text">Correo: {{t.correo}}</p>
+                  <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+                  <a href="{% url 'transportes:verUsuario' t.id %}">Ver</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        {%endfor%}
+      <div class="container">
+        <p>Página {{ datos.number }} de {{ datos.paginator.num_pages }}.</p>
+        <nav aria-label="...">
+            <ul class="pagination">
+              <li class="page-item {% if not datos.has_previous %}disabled{% endif %}">
+                <a class="page-link" href="?page=1">&laquo;</a>
+              </li>
+              <li class="page-item {% if not datos.has_previous %}disabled{% endif %}">
+                <a class="page-link" {% if datos.has_previous %}href="?page={{ datos.previous_page_number }}"{% endif %}>Anterior</a>
+              </li>
+              
+                {% for i in "x"|rjust:datos.paginator.num_pages|make_list %}
+                    <li class="page-item {% if forloop.counter == datos.number %}active{% endif %}" aria-current="page">
+                        <a class="page-link" href="?page={{ forloop.counter }}">{{ forloop.counter }}</a>
+                    </li>
+                {% endfor %}
+
+              <li class="page-item {% if not datos.has_next %}disabled{% endif %}">
+                <a class="page-link" {% if datos.has_next %}href="?page={{ datos.next_page_number }}"{% endif %}>Siguiente</a>
+              </li>
+              <li class="page-item {% if not datos.has_next %}disabled{% endif %}">
+                <a class="page-link" {% if datos.has_next %}href="?page={{ datos.paginator.num_pages }}"{% endif %}>&raquo;</a>
+              </li>
+            </ul>
+          </nav>
+        </div>
+
+          <footer>
+            <div class="row text-white">
+                <div class="container">
+                    <div class="row gy-5">
+                        <div class="col-lg-4 px-5">
+                            <h4 class="font-weight-bold mb-4">NOSOTROS</h4>
+                            <p>Zombie ipsum reversus ab viral inferno, nam rick grimes malum cerebro. De carne lumbering
+                                animata corpora quaeritis. Summus brains sit​​.</p>
+                        </div>
+                        <div class="col-lg-4 px-5">
+                            <h4 class="font-weight-bold mb-4">CREDITOS</h4>
+                            <a href="https://www.freepik.com/free-photos-vectors/water">Water psd created by freepik -
+                                www.freepik.com</a>
+                        </div>
+                        <div class="col-lg-4 px-5">
+                            <h4 class="font-weight-bold mb-4">CONTACTANOS</h4>
+                            <div class="d-flex">
+                                <span class="material-icons">
+                                    local_phone
+                                </span>
+                                <p class="ml-3">(01) 555 5555</p>
+                            </div>
+                            <div class="d-flex">
+                                <span class="material-icons">
+                                    house
+                                </span>
+                                <p class="ml-3">Jr. lorem ipsum #777</p>
+                            </div>
+                            <div class="d-flex">
+                                <span class="material-icons">
+                                    email
+                                </span>
+                                <p class="ml-3">andygeek@andygeek.com</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            </footer>
+
+
+    {%else%}
+        No hay datos...
+    {%endif%}
+
+    {%endblock%}
+
+
+    <script src="{% static 'transportes/js/popper.min.js' %}"></script>
+    <script src="{% static 'transportes/js/bootstrap.min.js' %}"></script>
+
+</body>
+</html>

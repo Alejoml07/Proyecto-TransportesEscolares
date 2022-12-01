@@ -1,0 +1,53 @@
+{%extends "transportes/base.html"%}
+{% load static %}
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulario Vehiculo</title>
+</head>
+<body>
+    {%block contenedor%}
+    <h3>Editar Vehiculo</h3>
+    <form action="{%url 'transportes:actualizarVehiculo'%}" method="post">
+        {%csrf_token%}
+        <input type="hidden" name="id" value="{{ vehiculo.id }}"/>
+        <div class="mb-3 mt-3">
+            <label>Cliente</label>
+            <select class="form-control" name="cliente">
+                <option value="">Seleccione:</option>
+                {% for c in cliente %}
+                    <option value="{{ c.id }}"{% if vehiculo.cliente.id == c.id %}selected=""{% endif %}>{{ c.id}} - {{ c.nombre }}</option>
+                {% endfor %}
+            </select>
+    
+        </div>
+       
+          <div class="mb-3 mt-3">
+            <label for="" class="form-label">placa:</label>
+            <input type="text" class="form-control" id="" value="{{ vehiculo.placa }}" name="placa">
+          </div>
+          <div class="mb-3 mt-3">
+            <label for="" class="form-label">marca:</label>
+            <input type="text" class="form-control" id="" value="{{ vehiculo.marca }}" name="marca">
+          </div>
+          <div class="mb-3 mt-3">
+            <label for="" class="form-label">color:</label>
+            <input type="text" class="form-control" id="" value="{{ vehiculo.color }}" name="color">
+          </div>
+          <label>Foto</label>
+          <strong><span> - actual: {{ trabajador.foto }}</span></strong>
+          <input type="file" name="foto" class="form-control" accept="image/*" /><br>
+          
+         
+        
+        <button type="submit" class="btn btn-primary">Enviar</button>
+      </form>
+      {%endblock%}
+      
+</body>
+</html>
