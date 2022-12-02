@@ -24,14 +24,17 @@ from os import remove, path
 
 
 # Create your views here.
+
+'''Retorna a la pagina principal (Landing page)'''
 def indexPrimary(request):
     return render(request, 'transportes/indexPrimary.html')
 
+'''Pagina Index despues de ser logueado'''
 def index(request):
     login = request.session.get('logueo', False)
     if login:
         q = Cliente.objects.all()
-        paginator = Paginator(q, 10) # Mostrar 3 registros por página...
+        paginator = Paginator(q, 10) # Mostrar 10 registros por página...
         page_number = request.GET.get('page')
         #Sobreescribir la salida de la consulta.......
         q = paginator.get_page(page_number)
@@ -41,10 +44,11 @@ def index(request):
         messages.warning(request, "Inicie sesión primero...")
         return redirect('transportes:loginFormulario')
 
+'''Retorna al formulario para loguearse '''
 def loginFormulario(request):
     return render(request, 'transportes/login/login.html')
 
-
+'''Comprobar el usuario y clave en la base de datos'''
 def login(request):
     if request.method == "POST":
         try:
@@ -68,6 +72,7 @@ def login(request):
         messages.warning(request, "Usted no ha enviado datos...")
         return redirect('transportes:loginFormulario')
 
+'''Cerrar la sesión de logueo'''
 def logout(request):
     try:
         del request.session["logueo"]
@@ -77,10 +82,11 @@ def logout(request):
         messages.error(request, f"Error: {e}")
         return redirect('transportes:index')
 #--------------------------USUARIOS-----------------------------------------------------
-def listarUsuario(request):
-     #Obtener la sesión
-    login = request.session.get('logueo', False)
 
+'''Obtener los usuarios y enviarlos a un template'''
+def listarUsuario(request):
+    #Obtener la sesión
+    login = request.session.get('logueo', False)
     if login:
         q = Cliente.objects.all()
         paginator = Paginator(q, 3) # Mostrar 3 registros por página...
@@ -93,10 +99,17 @@ def listarUsuario(request):
         messages.warning(request, "Inicie sesión primero...")
         return redirect('transportes:loginFormulario')
 
-
+'''Retorna a al template para registrar nuevos usuarios'''
 def registrarUsuario(request):
-    return render(request, 'transportes/login/usuarios/registrarUsuario.html')
-   
+    #Obtener la sesión
+    login = request.session.get('logueo', False)
+    if login:
+        return render(request, 'transportes/login/usuarios/registrarUsuario.html')
+    else:
+        messages.warning(request, "Inicie sesión primero...")
+        return redirect('transportes:loginFormulario')
+
+'''Obtener los datos ingresados y guardarlos en un nuevo registro de usuario'''
 def guardarUsuario(request):
     try:
         if request.method == "POST":
@@ -118,6 +131,7 @@ def guardarUsuario(request):
     
     return redirect('transportes:listarUsuario')
 
+'''Retorna a un template con la información de un usuario especifico'''
 def verUsuario(request, id):
     login = request.session.get('logueo', False)
     if login:
@@ -129,7 +143,7 @@ def verUsuario(request, id):
         return redirect('transportes:loginFormulario')
 
 
-
+'''Retorna al formulario con la informacion del cliente y es editable'''
 def formularioEditar(request, id):
     login = request.session.get('logueo', False)
     if login:
@@ -140,7 +154,7 @@ def formularioEditar(request, id):
         messages.warning(request, "Inicie sesión primero...")
         return redirect('transportes:loginFormulario')
 
-
+'''Capturar y guardar los cambios ingresados'''
 def actualizarUsuario(request):
     try:
         if request.method == "POST":
@@ -164,7 +178,7 @@ def actualizarUsuario(request):
     
     return redirect('transportes:listarUsuario')
 
-
+'''Toma un usuario especifico y lo elimina '''
 def eliminarUsuario(request, id):
     try:
         p =  Cliente.objects.get(pk = id)
@@ -177,6 +191,7 @@ def eliminarUsuario(request, id):
     
     return redirect('transportes:listarUsuario')
 
+'''Elabora un filtro y hace una busqueda de un campo ingresado'''
 def buscarProducto(request):
     login = request.session.get('logueo', False)
     if login:
@@ -203,7 +218,7 @@ def buscarProducto(request):
 
 #-------------------------BENEFICIARIO--------------------------------------------
 
-
+'''Obtener los Beneficiarios y enviarlos a un template'''
 def listarBeneficiario(request):
     login = request.session.get('logueo', False)
 
@@ -225,6 +240,7 @@ def listarBeneficiario(request):
             messages.warning(request, "Inicie sesión primero...")
             return redirect('transportes:loginFormulario')
 
+'''Retorna a al template para registrar nuevos beneficiarios'''
 def registrarBeneficiario(request):
     login = request.session.get('logueo', False)
     if login and (login[2] == "A" or login[2] == "C"):
@@ -239,6 +255,7 @@ def registrarBeneficiario(request):
             messages.warning(request, "Inicie sesión primero...")
             return redirect('transportes:loginFormulario')
 
+'''Obtener los datos ingresados y guardarlos en un nuevo registro de beneficiario'''
 def guardarBeneficiario(request):
     try:
         if request.method == "POST":
@@ -260,6 +277,7 @@ def guardarBeneficiario(request):
     
     return redirect('transportes:listarBeneficiario')
 
+'''Retorna al formulario con la informacion del beneficiario y es editable'''
 def formularioEditarBeneficiario(request, id):
     login = request.session.get('logueo', False)
     if login and (login[2] == "A" or login[2] == "C"):
@@ -275,7 +293,7 @@ def formularioEditarBeneficiario(request, id):
             messages.warning(request, "Inicie sesión primero...")
             return redirect('transportes:loginFormulario')
 
-
+'''Capturar y guardar los cambios ingresados'''
 def actualizarBeneficiario(request):
     try:
         if request.method == "POST":
@@ -297,7 +315,7 @@ def actualizarBeneficiario(request):
     
     return redirect('transportes:listarBeneficiario')
 
-
+'''Toma un beneficiario especifico y lo elimina '''
 def eliminarBeneficiario(request, id):
     try:
         p =  Beneficiarios.objects.get(pk = id)
@@ -310,6 +328,7 @@ def eliminarBeneficiario(request, id):
     
     return redirect('transportes:listarBeneficiario')
 
+'''Elabora un filtro y hace una busqueda de un campo ingresado'''
 def buscarBeneficiario(request):
     login = request.session.get('logueo', False)
     if login and (login[2] == "A" or login[2] == "C"):
@@ -337,6 +356,7 @@ def buscarBeneficiario(request):
             return redirect('transportes:loginFormulario')
 
 #--------------------COMENTARIOS----------------------------------------
+'''Obtener los comentarios y enviarlos a un template'''
 def listarComentarios(request):
     login = request.session.get('logueo', False)
 
@@ -354,6 +374,7 @@ def listarComentarios(request):
         messages.warning(request, "Inicie sesión primero...")
         return redirect('transportes:loginFormulario')
 
+'''Retorna a al template para registrar nuevos comentarios'''
 def registrarComentarios(request):
     login = request.session.get('logueo', False)
     if login:
@@ -364,7 +385,7 @@ def registrarComentarios(request):
         messages.warning(request, "Inicie sesión primero...")
         return redirect('transportes:loginFormulario')
 
-
+'''Obtener los datos ingresados y guardarlos en un nuevo registro de Comentarios'''
 def guardarComentarios(request):
     try:
         if request.method == "POST":
@@ -385,6 +406,7 @@ def guardarComentarios(request):
     
     return redirect('transportes:listarComentarios')
 
+'''Retorna al formulario con la informacion del comentario y es editable'''
 def formularioEditarComentarios(request, id):
     login = request.session.get('logueo', False)
     if login:
@@ -396,8 +418,7 @@ def formularioEditarComentarios(request, id):
         messages.warning(request, "Inicie sesión primero...")
         return redirect('transportes:loginFormulario')
 
-
-
+'''Capturar y guardar los cambios ingresados'''
 def actualizarComentarios(request):
     try:
         if request.method == "POST":
@@ -417,7 +438,7 @@ def actualizarComentarios(request):
     
     return redirect('transportes:listarComentarios')
 
-
+'''Toma un comentario especifico y lo elimina '''
 def eliminarComentarios(request, id):
     try:
         p = Comentarios.objects.get(pk = id)
@@ -430,6 +451,7 @@ def eliminarComentarios(request, id):
     
     return redirect('transportes:listarComentarios')
 
+'''Elabora un filtro y hace una busqueda de un campo ingresado'''
 def buscarComentarios(request):
     login = request.session.get('logueo', False)
     if login:
@@ -453,7 +475,7 @@ def buscarComentarios(request):
         return redirect('transportes:loginFormulario')
 
 #--------------------SERVICIOS----------------------------------------
-
+'''Obtener los servicios y enviarlos a un template'''
 def listarServicios(request):
     login = request.session.get('logueo', False)
     if login and (login[2] == "A"):
@@ -474,6 +496,7 @@ def listarServicios(request):
             messages.warning(request, "Inicie sesión primero...")
             return redirect('transportes:loginFormulario')
 
+'''Retorna a al template para registrar nuevos servicios'''
 def registrarServicios(request):
     login = request.session.get('logueo', False)
     if login and (login[2] == "A"):
@@ -486,7 +509,7 @@ def registrarServicios(request):
             messages.warning(request, "Inicie sesión primero...")
             return redirect('transportes:loginFormulario')
 
-
+'''Obtener los datos ingresados y guardarlos en un nuevo registro de servicios'''
 def guardarServicios(request):
     try:
         if request.method == "POST":
@@ -502,7 +525,7 @@ def guardarServicios(request):
     
     return redirect('transportes:listarServicios')
 
-
+'''Retorna al formulario con la informacion del servicio y es editable'''
 def formularioEditarServicios(request, id):
     login = request.session.get('logueo', False)
     if login and (login[2] == "A"):
@@ -517,8 +540,7 @@ def formularioEditarServicios(request, id):
             messages.warning(request, "Inicie sesión primero...")
             return redirect('transportes:loginFormulario')
 
-
-
+'''Capturar y guardar los cambios ingresados'''
 def actualizarServicios(request):
     try:
         if request.method == "POST":
@@ -536,7 +558,7 @@ def actualizarServicios(request):
     
     return redirect('transportes:listarServicios')
 
-
+'''Toma un beneficiario especifico y lo elimina '''
 def eliminarServicios(request, id):
     try:
         p = Servicios.objects.get(pk = id)
@@ -549,6 +571,7 @@ def eliminarServicios(request, id):
     
     return redirect('transportes:listarServicios')
 
+'''Elabora un filtro y hace una busqueda de un campo ingresado'''
 def buscarServicios(request):
     login = request.session.get('logueo', False)
     if login and (login[2] == "A"):
@@ -578,6 +601,7 @@ def buscarServicios(request):
 
 
 #--------------------PETICIONES----------------------------------------
+'''Obtener los peticiones y enviarlos a un template'''
 def listarPeticiones(request):
     login = request.session.get('logueo', False)
 
@@ -599,6 +623,7 @@ def listarPeticiones(request):
             messages.warning(request, "Inicie sesión primero...")
             return redirect('transportes:loginFormulario')
 
+'''Retorna a al template para registrar nuevos peticiones'''
 def registrarPeticiones(request):
     login = request.session.get('logueo', False)
     if login and (login[2] == "A" or login[2] == "C"):
@@ -614,6 +639,7 @@ def registrarPeticiones(request):
             messages.warning(request, "Inicie sesión primero...")
             return redirect('transportes:loginFormulario')
 
+'''Obtener los datos ingresados y guardarlos en un nuevo registro de peticion'''
 def guardarPeticiones(request):
     try:
         c =  Cliente.objects.get(pk = request.POST["cliente"])
@@ -639,7 +665,7 @@ def guardarPeticiones(request):
     
     return redirect('transportes:listarPeticiones')
 
-
+'''Retorna al formulario con la informacion de la peticion y es editable'''
 def formularioEditarPeticiones(request, id):
     login = request.session.get('logueo', False)
     if login and (login[2] == "A" or login[2] == "C"):
@@ -656,7 +682,7 @@ def formularioEditarPeticiones(request, id):
             messages.warning(request, "Inicie sesión primero...")
             return redirect('transportes:loginFormulario')
 
-
+'''Capturar y guardar los cambios ingresados'''
 def actualizarPeticiones(request):
     try:
         if request.method == "POST":
@@ -683,7 +709,7 @@ def actualizarPeticiones(request):
     
     return redirect('transportes:listarPeticiones')
 
-
+'''Toma una petición especifico y lo elimina '''
 def eliminarPeticiones(request, id):
     try:
         p =  Peticiones.objects.get(pk = id)
@@ -696,6 +722,7 @@ def eliminarPeticiones(request, id):
     
     return redirect('transportes:listarPeticiones')
 
+'''Elabora un filtro y hace una busqueda de un campo ingresado'''
 def buscarPeticiones(request):
     login = request.session.get('logueo', False)
     if login and (login[2] == "A" or login[2] == "C"):
@@ -725,7 +752,7 @@ def buscarPeticiones(request):
     
 #--------------------VEHICULOS----------------------------------------
 
-
+'''Obtener los Vehiculos y enviarlos a un template'''
 def listarVehiculo(request):
     login = request.session.get('logueo', False)
 
@@ -747,7 +774,7 @@ def listarVehiculo(request):
             messages.warning(request, "Inicie sesión primero...")
             return redirect('transportes:loginFormulario')
 
-
+'''Retorna a al template para registrar nuevos vehiculos'''
 def registrarVehiculo(request):
     login = request.session.get('logueo', False)
     if login and (login[2] == "A" or login[2] == "P"):
@@ -762,6 +789,7 @@ def registrarVehiculo(request):
             messages.warning(request, "Inicie sesión primero...")
             return redirect('transportes:loginFormulario')
 
+'''Obtener los datos ingresados y guardarlos en un nuevo registro de vehiculo'''
 def guardarVehiculo(request):
     try:
         if request.method == "POST":
@@ -791,6 +819,7 @@ def guardarVehiculo(request):
     
     return redirect('transportes:listarVehiculo')
 
+'''Retorna al formulario con la informacion del vehiculo y es editable'''
 def formularioEditarVehiculo(request, id):
     login = request.session.get('logueo', False)
     if login and (login[2] == "A" or login[2] == "P"):
@@ -806,7 +835,7 @@ def formularioEditarVehiculo(request, id):
             messages.warning(request, "Inicie sesión primero...")
             return redirect('transportes:loginFormulario')
 
-
+'''Capturar y guardar los cambios ingresados'''
 def actualizarVehiculo(request):
     try:
         if request.method == "POST":
@@ -828,7 +857,7 @@ def actualizarVehiculo(request):
     
     return redirect('transportes:listarVehiculo')
 
-
+'''Toma un vehiculo especifico y lo elimina '''
 def eliminarVehiculo(request, id):
     try:
         p =Vehiculo.objects.get(pk = id)
@@ -853,6 +882,7 @@ def eliminarVehiculo(request, id):
     
     return redirect('transportes:listarVehiculo')
 
+'''Elabora un filtro y hace una busqueda de un campo ingresado'''
 def buscarVehiculo(request):
     login = request.session.get('logueo', False)
     if login and (login[2] == "A" or login[2] == "P"):
