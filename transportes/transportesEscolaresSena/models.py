@@ -3,7 +3,8 @@ from django.db import models
 # Create your models here.
 
 class Cliente(models.Model):
- 
+    """Cliente de la aplicacion, dividido en 3 roles
+    """
     nombre = models.CharField(max_length= 100)
     apellido = models.CharField(max_length= 100)
     correo = models.EmailField(max_length= 250, null=True, blank=True)

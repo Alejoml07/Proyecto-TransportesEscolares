@@ -25,11 +25,9 @@ from os import remove, path
 
 # Create your views here.
 
-'''Retorna a la pagina principal (Landing page)'''
 def indexPrimary(request):
     return render(request, 'transportes/indexPrimary.html')
 
-'''Pagina Index despues de ser logueado'''
 def index(request):
     login = request.session.get('logueo', False)
     if login:
@@ -44,11 +42,9 @@ def index(request):
         messages.warning(request, "Inicie sesión primero...")
         return redirect('transportes:loginFormulario')
 
-'''Retorna al formulario para loguearse '''
 def loginFormulario(request):
     return render(request, 'transportes/login/login.html')
 
-'''Comprobar el usuario y clave en la base de datos'''
 def login(request):
     if request.method == "POST":
         try:
@@ -72,7 +68,6 @@ def login(request):
         messages.warning(request, "Usted no ha enviado datos...")
         return redirect('transportes:loginFormulario')
 
-'''Cerrar la sesión de logueo'''
 def logout(request):
     try:
         del request.session["logueo"]
@@ -83,8 +78,15 @@ def logout(request):
         return redirect('transportes:index')
 #--------------------------USUARIOS-----------------------------------------------------
 
-'''Obtener los usuarios y enviarlos a un template'''
 def listarUsuario(request):
+    """Se usa para obtener los datos de todos los usuarios y enviarlos a un template 
+
+    Args:
+        q: recibe todos los objetos del modelo Cliente
+
+    Returns:
+        template:`transportes/login/usuarios/listarUsuario.html` y los datos capturados `q`
+    """
     #Obtener la sesión
     login = request.session.get('logueo', False)
     if login:
@@ -99,8 +101,12 @@ def listarUsuario(request):
         messages.warning(request, "Inicie sesión primero...")
         return redirect('transportes:loginFormulario')
 
-'''Retorna a al template para registrar nuevos usuarios'''
 def registrarUsuario(request):
+    """Se usa para retornar el template en la cual esta ubicado el formulario para registrar usuarios
+
+    Returns:
+        template:`transportes/login/usuarios/registrarUsuario.html`
+    """
     #Obtener la sesión
     login = request.session.get('logueo', False)
     if login:
@@ -109,8 +115,16 @@ def registrarUsuario(request):
         messages.warning(request, "Inicie sesión primero...")
         return redirect('transportes:loginFormulario')
 
-'''Obtener los datos ingresados y guardarlos en un nuevo registro de usuario'''
+
 def guardarUsuario(request):
+    """Obtener los datos ingresados y guardarlos en un nuevo registro de usuario
+
+    Args:
+        
+    
+    Returns:
+        
+    """
     try:
         if request.method == "POST":
             

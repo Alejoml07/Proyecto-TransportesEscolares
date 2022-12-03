@@ -1,0 +1,1130 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="es" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>transportesEscolaresSena.views &mdash; documentación de TransportesEscolares - 1</title>
+  
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/fonts.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/translations.js"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Índice" href="../../genindex.html" />
+    <link rel="search" title="Búsqueda" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> TransportesEscolares
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Buscar documentos" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <!-- Local TOC -->
+              <div class="local-toc"></div>
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">TransportesEscolares</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+<div class="git-ribbon">
+  <a href="http://github.com/SwissDataScienceCenter" rel="me">Join us on GitHub</a>
+</div>
+
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../index.html">Código de módulo</a> &raquo;</li>
+        
+      <li>transportesEscolaresSena.views</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Código fuente para transportesEscolaresSena.views</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">django.shortcuts</span> <span class="kn">import</span> <span class="n">render</span><span class="p">,</span> <span class="n">redirect</span>
+<span class="kn">from</span> <span class="nn">django.http</span> <span class="kn">import</span> <span class="n">HttpResponse</span><span class="p">,</span> <span class="n">HttpResponseRedirect</span>
+<span class="kn">from</span> <span class="nn">django.urls</span> <span class="kn">import</span> <span class="n">reverse</span> 
+
+<span class="c1">#Mensaje tipo cookie temporales </span>
+<span class="kn">from</span> <span class="nn">django.contrib</span> <span class="kn">import</span> <span class="n">messages</span>
+
+<span class="c1">#Gestion de errores de base de datos </span>
+<span class="kn">from</span> <span class="nn">django.db</span> <span class="kn">import</span> <span class="n">IntegrityError</span>
+
+<span class="kn">from</span> <span class="nn">.models</span> <span class="kn">import</span> <span class="n">Cliente</span><span class="p">,</span><span class="n">Beneficiarios</span><span class="p">,</span><span class="n">Comentarios</span><span class="p">,</span><span class="n">Servicios</span><span class="p">,</span><span class="n">Peticiones</span><span class="p">,</span> <span class="n">Vehiculo</span>
+
+<span class="kn">from</span> <span class="nn">django.db.models</span> <span class="kn">import</span> <span class="n">Q</span>
+
+<span class="kn">from</span> <span class="nn">django.core.paginator</span> <span class="kn">import</span> <span class="n">Paginator</span>
+
+<span class="kn">from</span> <span class="nn">django.core.files.storage</span> <span class="kn">import</span> <span class="n">FileSystemStorage</span>
+
+<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+<span class="n">BASE_DIR</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span><span class="o">.</span><span class="n">resolve</span><span class="p">()</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">parent</span>
+
+<span class="kn">from</span> <span class="nn">os</span> <span class="kn">import</span> <span class="n">remove</span><span class="p">,</span> <span class="n">path</span>
+
+
+
+<span class="c1"># Create your views here.</span>
+
+<span class="k">def</span> <span class="nf">indexPrimary</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s1">&#39;transportes/indexPrimary.html&#39;</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">index</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="n">login</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;logueo&#39;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">login</span><span class="p">:</span>
+        <span class="n">q</span> <span class="o">=</span> <span class="n">Cliente</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
+        <span class="n">paginator</span> <span class="o">=</span> <span class="n">Paginator</span><span class="p">(</span><span class="n">q</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span> <span class="c1"># Mostrar 10 registros por página...</span>
+        <span class="n">page_number</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">GET</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;page&#39;</span><span class="p">)</span>
+        <span class="c1">#Sobreescribir la salida de la consulta.......</span>
+        <span class="n">q</span> <span class="o">=</span> <span class="n">paginator</span><span class="o">.</span><span class="n">get_page</span><span class="p">(</span><span class="n">page_number</span><span class="p">)</span>
+        <span class="n">contexto</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;datos&#39;</span><span class="p">:</span> <span class="n">q</span><span class="p">}</span>
+        <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s1">&#39;transportes/index.html&#39;</span><span class="p">,</span><span class="n">contexto</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">messages</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s2">&quot;Inicie sesión primero...&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="s1">&#39;transportes:loginFormulario&#39;</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">loginFormulario</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s1">&#39;transportes/login/login.html&#39;</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">login</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;POST&quot;</span><span class="p">:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">user</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">[</span><span class="s2">&quot;usuario&quot;</span><span class="p">]</span>
+            <span class="n">passw</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">[</span><span class="s2">&quot;clave&quot;</span><span class="p">]</span>
+
+            <span class="n">q</span> <span class="o">=</span> <span class="n">Cliente</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">usuario</span> <span class="o">=</span> <span class="n">user</span><span class="p">,</span> <span class="n">clave</span> <span class="o">=</span> <span class="n">passw</span><span class="p">)</span>
+            <span class="c1"># crear la sesión</span>
+            <span class="n">request</span><span class="o">.</span><span class="n">session</span><span class="p">[</span><span class="s2">&quot;logueo&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">q</span><span class="o">.</span><span class="n">nombre</span><span class="p">,</span> <span class="n">q</span><span class="o">.</span><span class="n">apellido</span><span class="p">,</span> <span class="n">q</span><span class="o">.</span><span class="n">rol</span><span class="p">,</span> <span class="n">q</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">q</span><span class="o">.</span><span class="n">get_rol_display</span><span class="p">()]</span>
+
+            <span class="n">messages</span><span class="o">.</span><span class="n">success</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s2">&quot;Bienvenido!!&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="s1">&#39;transportes:index&#39;</span><span class="p">)</span>     
+
+        <span class="k">except</span> <span class="n">Cliente</span><span class="o">.</span><span class="n">DoesNotExist</span><span class="p">:</span>
+            <span class="n">messages</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s2">&quot;Usuario o contraseña incorrectos...&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="s1">&#39;transportes:loginFormulario&#39;</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">messages</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;Error: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="s1">&#39;transportes:loginFormulario&#39;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">messages</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s2">&quot;Usted no ha enviado datos...&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="s1">&#39;transportes:loginFormulario&#39;</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">logout</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">del</span> <span class="n">request</span><span class="o">.</span><span class="n">session</span><span class="p">[</span><span class="s2">&quot;logueo&quot;</span><span class="p">]</span>
+        <span class="n">messages</span><span class="o">.</span><span class="n">success</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s2">&quot;Sesión cerrada correctamente!!&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="s1">&#39;transportes:index&#39;</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="n">messages</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;Error: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="s1">&#39;transportes:index&#39;</span><span class="p">)</span>
+<span class="c1">#--------------------------USUARIOS-----------------------------------------------------</span>
+
+<div class="viewcode-block" id="listarUsuario"><a class="viewcode-back" href="../../index.html#transportesEscolaresSena.views.listarUsuario">[documentos]</a><span class="k">def</span> <span class="nf">listarUsuario</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Se usa para obtener los datos de todos los usuarios y enviarlos a un template </span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        q: recibe todos los objetos del modelo Cliente</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        template:`transportes/login/usuarios/listarUsuario.html` y los datos capturados `q`</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1">#Obtener la sesión</span>
+    <span class="n">login</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;logueo&#39;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">login</span><span class="p">:</span>
+        <span class="n">q</span> <span class="o">=</span> <span class="n">Cliente</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
+        <span class="n">paginator</span> <span class="o">=</span> <span class="n">Paginator</span><span class="p">(</span><span class="n">q</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span> <span class="c1"># Mostrar 3 registros por página...</span>
+        <span class="n">page_number</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">GET</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;page&#39;</span><span class="p">)</span>
+        <span class="c1">#Sobreescribir la salida de la consulta.......</span>
+        <span class="n">q</span> <span class="o">=</span> <span class="n">paginator</span><span class="o">.</span><span class="n">get_page</span><span class="p">(</span><span class="n">page_number</span><span class="p">)</span>
+        <span class="n">contexto</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;datos&#39;</span><span class="p">:</span> <span class="n">q</span><span class="p">}</span>
+        <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s1">&#39;transportes/login/usuarios/listarUsuario.html&#39;</span><span class="p">,</span> <span class="n">contexto</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">messages</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s2">&quot;Inicie sesión primero...&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="s1">&#39;transportes:loginFormulario&#39;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="registrarUsuario"><a class="viewcode-back" href="../../index.html#transportesEscolaresSena.views.registrarUsuario">[documentos]</a><span class="k">def</span> <span class="nf">registrarUsuario</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Se usa para retornar el template en la cual esta ubicado el formulario para registrar usuarios</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        template:`transportes/login/usuarios/registrarUsuario.html`</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1">#Obtener la sesión</span>
+    <span class="n">login</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;logueo&#39;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">login</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s1">&#39;transportes/login/usuarios/registrarUsuario.html&#39;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">messages</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s2">&quot;Inicie sesión primero...&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="s1">&#39;transportes:loginFormulario&#39;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="guardarUsuario"><a class="viewcode-back" href="../../index.html#transportesEscolaresSena.views.guardarUsuario">[documentos]</a><span class="k">def</span> <span class="nf">guardarUsuario</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Obtener los datos ingresados y guardarlos en un nuevo registro de usuario</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        </span>
+<span class="sd">    </span>
+<span class="sd">    Returns:</span>
+<span class="sd">        </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;POST&quot;</span><span class="p">:</span>
+            
+            <span class="n">q</span> <span class="o">=</span> <span class="n">Cliente</span><span class="p">(</span><span class="n">nombre</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">[</span><span class="s2">&quot;nombre&quot;</span><span class="p">],</span>
+                        <span class="n">apellido</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">[</span><span class="s2">&quot;apellido&quot;</span><span class="p">],</span>
+                        <span class="n">correo</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">[</span><span class="s2">&quot;correo&quot;</span><span class="p">],</span>
+                        <span class="n">direccion</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">[</span><span class="s2">&quot;direccion&quot;</span><span class="p">],</span>
+                        <span class="n">documento</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">[</span><span class="s2">&quot;documento&quot;</span><span class="p">],</span>
+                        <span class="n">fecha_nacimiento</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">[</span><span class="s2">&quot;fecha_nacimiento&quot;</span><span class="p">])</span>
+            <span class="n">q</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+
+            <span class="n">messages</span><span class="o">.</span><span class="n">success</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s2">&quot;Usuario guardado exitosamente&quot;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">messages</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s2">&quot;No se han enviado datos...&quot;</span><span class="p">)</span>
+
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="n">messages</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;Error: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    
+    <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="s1">&#39;transportes:listarUsuario&#39;</span><span class="p">)</span></div>
+
+<span class="sd">&#39;&#39;&#39;Retorna a un template con la información de un usuario especifico&#39;&#39;&#39;</span>
+<span class="k">def</span> <span class="nf">verUsuario</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="nb">id</span><span class="p">):</span>
+    <span class="n">login</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;logueo&#39;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">login</span><span class="p">:</span>
+        <span class="n">p</span> <span class="o">=</span> <span class="n">Cliente</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">pk</span> <span class="o">=</span> <span class="nb">id</span><span class="p">)</span>
+        <span class="n">contexto</span> <span class="o">=</span> <span class="p">{</span> <span class="s2">&quot;cliente&quot;</span><span class="p">:</span> <span class="n">p</span> <span class="p">}</span>
+        <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s1">&#39;transportes/login/usuarios/verUsuario.html&#39;</span><span class="p">,</span> <span class="n">contexto</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">messages</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s2">&quot;Inicie sesión primero...&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="s1">&#39;transportes:loginFormulario&#39;</span><span class="p">)</span>
+
+
+<span class="sd">&#39;&#39;&#39;Retorna al formulario con la informacion del cliente y es editable&#39;&#39;&#39;</span>
+<span class="k">def</span> <span class="nf">formularioEditar</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="nb">id</span><span class="p">):</span>
+    <span class="n">login</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;logueo&#39;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">login</span><span class="p">:</span>
+        <span class="n">p</span> <span class="o">=</span> <span class="n">Cliente</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">pk</span> <span class="o">=</span> <span class="nb">id</span><span class="p">)</span>
+        <span class="n">contexto</span> <span class="o">=</span> <span class="p">{</span> <span class="s2">&quot;cliente&quot;</span><span class="p">:</span> <span class="n">p</span> <span class="p">}</span>
+        <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s1">&#39;transportes/login/usuarios/editarUsuario.html&#39;</span><span class="p">,</span> <span class="n">contexto</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">messages</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s2">&quot;Inicie sesión primero...&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="s1">&#39;transportes:loginFormulario&#39;</span><span class="p">)</span>
+
+<span class="sd">&#39;&#39;&#39;Capturar y guardar los cambios ingresados&#39;&#39;&#39;</span>
+<span class="k">def</span> <span class="nf">actualizarUsuario</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;POST&quot;</span><span class="p">:</span>
+            <span class="c1">#Obtener la instancia de producto a modificar</span>
+            <span class="n">p</span> <span class="o">=</span>  <span class="n">Cliente</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">pk</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">])</span>
+            
+            <span class="n">p</span><span class="o">.</span><span class="n">nombre</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">[</span><span class="s2">&quot;nombre&quot;</span><span class="p">]</span>
+            <span class="n">p</span><span class="o">.</span><span class="n">apellido</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">[</span><span class="s2">&quot;apellido&quot;</span><span class="p">]</span>
+            <span class="n">p</span><span class="o">.</span><span class="n">correo</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">[</span><span class="s2">&quot;correo&quot;</span><span class="p">]</span>
+            <span class="n">p</span><span class="o">.</span><span class="n">direccion</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">[</span><span class="s2">&quot;direccion&quot;</span><span class="p">]</span>
+            <span class="n">p</span><span class="o">.</span><span class="n">documento</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">[</span><span class="s2">&quot;documento&quot;</span><span class="p">]</span>
+            <span class="n">p</span><span class="o">.</span><span class="n">fecha_nacimiento</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">[</span><span class="s2">&quot;fecha_nacimiento&quot;</span><span class="p">]</span>
+
+            
+            <span class="n">p</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+            <span class="n">messages</span><span class="o">.</span><span class="n">success</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s2">&quot;Usuario actualizado correctamente!!&quot;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">messages</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s2">&quot;Usted no ha enviado datos...&quot;</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="n">messages</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;Error: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    
+    <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="s1">&#39;transportes:listarUsuario&#39;</span><span class="p">)</span>
+
+<span class="sd">&#39;&#39;&#39;Toma un usuario especifico y lo elimina &#39;&#39;&#39;</span>
+<span class="k">def</span> <span class="nf">eliminarUsuario</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="nb">id</span><span class="p">):</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">p</span> <span class="o">=</span>  <span class="n">Cliente</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">pk</span> <span class="o">=</span> <span class="nb">id</span><span class="p">)</span>
+        <span class="n">p</span><span class="o">.</span><span class="n">delete</span><span class="p">()</span>
+        <span class="n">messages</span><span class="o">.</span><span class="n">success</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s2">&quot;Usuario eliminado correctamente!!&quot;</span><span class="p">)</span>
+    <span class="k">except</span> <span class="n">IntegrityError</span><span class="p">:</span>
+        <span class="n">messages</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s2">&quot;No puede eliminar este producto porque otros registros están relacionados con él....&quot;</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="n">messages</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;Error: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    
+    <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="s1">&#39;transportes:listarUsuario&#39;</span><span class="p">)</span>
+
+<span class="sd">&#39;&#39;&#39;Elabora un filtro y hace una busqueda de un campo ingresado&#39;&#39;&#39;</span>
+<span class="k">def</span> <span class="nf">buscarProducto</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="n">login</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;logueo&#39;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">login</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;POST&quot;</span><span class="p">:</span>
+            <span class="n">dato</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">[</span><span class="s2">&quot;buscar&quot;</span><span class="p">]</span>
+            <span class="n">q</span> <span class="o">=</span> <span class="n">Cliente</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span> <span class="n">Q</span><span class="p">(</span><span class="n">nombre__icontains</span> <span class="o">=</span> <span class="n">dato</span><span class="p">))</span>
+            
+            <span class="n">paginator</span> <span class="o">=</span> <span class="n">Paginator</span><span class="p">(</span><span class="n">q</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span> <span class="c1"># Mostrar 3 registros por página...</span>
+
+            <span class="n">page_number</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">GET</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;page&#39;</span><span class="p">)</span>
+            <span class="c1">#Sobreescribir la salida de la consulta.......</span>
+            <span class="n">q</span> <span class="o">=</span> <span class="n">paginator</span><span class="o">.</span><span class="n">get_page</span><span class="p">(</span><span class="n">page_number</span><span class="p">)</span>
+            
+            <span class="n">contexto</span> <span class="o">=</span> <span class="p">{</span> <span class="s2">&quot;datos&quot;</span><span class="p">:</span> <span class="n">q</span> <span class="p">}</span>
+            <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s1">&#39;transportes/login/usuarios/listar_Usuario_ajax.html&#39;</span><span class="p">,</span> <span class="n">contexto</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">messages</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s2">&quot;Error no envió datos...&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="s1">&#39;transportes:listarUsuario&#39;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">messages</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s2">&quot;Inicie sesión primero...&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="s1">&#39;transportes:loginFormulario&#39;</span><span class="p">)</span>
+    
+
+
+<span class="c1">#-------------------------BENEFICIARIO--------------------------------------------</span>
+
+<span class="sd">&#39;&#39;&#39;Obtener los Beneficiarios y enviarlos a un template&#39;&#39;&#39;</span>
+<span class="k">def</span> <span class="nf">listarBeneficiario</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="n">login</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;logueo&#39;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">login</span> <span class="ow">and</span> <span class="p">(</span><span class="n">login</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;A&quot;</span> <span class="ow">or</span> <span class="n">login</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;C&quot;</span><span class="p">):</span>
+        <span class="n">b</span> <span class="o">=</span> <span class="n">Beneficiarios</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
+        <span class="n">paginator</span> <span class="o">=</span> <span class="n">Paginator</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span> <span class="c1"># Mostrar 3 registros por página...</span>
+
+        <span class="n">page_number</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">GET</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;page&#39;</span><span class="p">)</span>
+        <span class="c1">#Sobreescribir la salida de la consulta.......</span>
+        <span class="n">b</span> <span class="o">=</span> <span class="n">paginator</span><span class="o">.</span><span class="n">get_page</span><span class="p">(</span><span class="n">page_number</span><span class="p">)</span>
+        <span class="n">contextob</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;datosB&#39;</span><span class="p">:</span> <span class="n">b</span><span class="p">}</span>
+
+        <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s1">&#39;transportes/login/beneficiarios/listarBeneficiario.html&#39;</span><span class="p">,</span> <span class="n">contextob</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">login</span> <span class="ow">and</span> <span class="p">(</span><span class="n">login</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">&quot;A&quot;</span> <span class="ow">and</span> <span class="n">login</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">&quot;C&quot;</span><span class="p">):</span>
+            <span class="n">messages</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s2">&quot;Usted no tiene autorización para acceder al módulo...&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="s1">&#39;transportes:index&#39;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">messages</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s2">&quot;Inicie sesión primero...&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="s1">&#39;transportes:loginFormulario&#39;</span><span class="p">)</span>
+
+<span class="sd">&#39;&#39;&#39;Retorna a al template para registrar nuevos beneficiarios&#39;&#39;&#39;</span>
+<span class="k">def</span> <span class="nf">registrarBeneficiario</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="n">login</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;logueo&#39;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">login</span> <span class="ow">and</span> <span class="p">(</span><span class="n">login</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;A&quot;</span> <span class="ow">or</span> <span class="n">login</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;C&quot;</span><span class="p">):</span>
+        <span class="n">u</span> <span class="o">=</span> <span class="n">Cliente</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
+        <span class="n">contexto</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;cli&#39;</span><span class="p">:</span> <span class="n">u</span><span class="p">}</span>
+        <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s1">&#39;transportes/login/beneficiarios/registrarBeneficiario.html&#39;</span><span class="p">,</span> <span class="n">contexto</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">login</span> <span class="ow">and</span> <span class="p">(</span><span class="n">login</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">&quot;A&quot;</span> <span class="ow">and</span> <span class="n">login</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">&quot;C&quot;</span><span class="p">):</span>
+            <span class="n">messages</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s2">&quot;Usted no tiene autorización para acceder al módulo...&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="s1">&#39;transportes:index&#39;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">messages</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s2">&quot;Inicie sesión primero...&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="s1">&#39;transportes:loginFormulario&#39;</span><span class="p">)</span>
+
+<span class="sd">&#39;&#39;&#39;Obtener los datos ingresados y guardarlos en un nuevo registro de beneficiario&#39;&#39;&#39;</span>
+<span class="k">def</span> <span class="nf">guardarBeneficiario</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;POST&quot;</span><span class="p">:</span>
+            <span class="n">u</span> <span class="o">=</span>  <span class="n">Cliente</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">pk</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">[</span><span class="s2">&quot;cliente&quot;</span><span class="p">])</span>
+            <span class="n">q</span> <span class="o">=</span> <span class="n">Beneficiarios</span><span class="p">(</span>
+                <span class="n">cliente</span> <span class="o">=</span> <span class="n">u</span><span class="p">,</span>
+                <span class="n">nombre</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">[</span><span class="s2">&quot;nombre&quot;</span><span class="p">],</span>
+                <span class="n">apellido</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">[</span><span class="s2">&quot;apellido&quot;</span><span class="p">],</span>
+                <span class="n">documento</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">[</span><span class="s2">&quot;documento&quot;</span><span class="p">],</span>
+                <span class="n">fecha_nacimiento</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">[</span><span class="s2">&quot;fecha_nacimiento&quot;</span><span class="p">])</span>
+            <span class="n">q</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+
+            <span class="n">messages</span><span class="o">.</span><span class="n">success</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s2">&quot;Beneficiario guardado exitosamente&quot;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">messages</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s2">&quot;No se han enviado datos...&quot;</span><span class="p">)</span>
+
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="n">messages</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;Error: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    
+    <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="s1">&#39;transportes:listarBeneficiario&#39;</span><span class="p">)</span>
+
+<span class="sd">&#39;&#39;&#39;Retorna al formulario con la informacion del beneficiario y es editable&#39;&#39;&#39;</span>
+<span class="k">def</span> <span class="nf">formularioEditarBeneficiario</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="nb">id</span><span class="p">):</span>
+    <span class="n">login</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;logueo&#39;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">login</span> <span class="ow">and</span> <span class="p">(</span><span class="n">login</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;A&quot;</span> <span class="ow">or</span> <span class="n">login</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;C&quot;</span><span class="p">):</span>
+        <span class="n">p</span> <span class="o">=</span> <span class="n">Beneficiarios</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">pk</span> <span class="o">=</span> <span class="nb">id</span><span class="p">)</span>
+        <span class="n">c</span> <span class="o">=</span> <span class="n">Cliente</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
+        <span class="n">contexto</span> <span class="o">=</span> <span class="p">{</span> <span class="s2">&quot;beneficiario&quot;</span><span class="p">:</span> <span class="n">p</span><span class="p">,</span> <span class="s2">&quot;cli&quot;</span><span class="p">:</span><span class="n">c</span> <span class="p">}</span>
+        <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s1">&#39;transportes/login/beneficiarios/editarBeneficiario.html&#39;</span><span class="p">,</span> <span class="n">contexto</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">login</span> <span class="ow">and</span> <span class="p">(</span><span class="n">login</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">&quot;A&quot;</span> <span class="ow">and</span> <span class="n">login</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">&quot;C&quot;</span><span class="p">):</span>
+            <span class="n">messages</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s2">&quot;Usted no tiene autorización para acceder al módulo...&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="s1">&#39;transportes:index&#39;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">messages</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s2">&quot;Inicie sesión primero...&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="s1">&#39;transportes:loginFormulario&#39;</span><span class="p">)</span>
+
+<span class="sd">&#39;&#39;&#39;Capturar y guardar los cambios ingresados&#39;&#39;&#39;</span>
+<span class="k">def</span> <span class="nf">actualizarBeneficiario</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;POST&quot;</span><span class="p">:</span>
+            <span class="c1">#Obtener la instancia de producto a modificar</span>
+            <span class="n">p</span> <span class="o">=</span>  <span class="n">Beneficiarios</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">pk</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">])</span>
+            <span class="n">c</span> <span class="o">=</span>  <span class="n">Cliente</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">pk</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">[</span><span class="s2">&quot;cliente&quot;</span><span class="p">])</span>
+            <span class="n">p</span><span class="o">.</span><span class="n">cliente</span> <span class="o">=</span> <span class="n">c</span>
+            <span class="n">p</span><span class="o">.</span><span class="n">nombre</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">[</span><span class="s2">&quot;nombre&quot;</span><span class="p">]</span>
+            <span class="n">p</span><span class="o">.</span><span class="n">apellido</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">[</span><span class="s2">&quot;apellido&quot;</span><span class="p">]</span>
+            <span class="n">p</span><span class="o">.</span><span class="n">documento</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">[</span><span class="s2">&quot;documento&quot;</span><span class="p">]</span>
+            <span class="n">p</span><span class="o">.</span><span class="n">fecha_nacimiento</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">[</span><span class="s2">&quot;fecha_nacimiento&quot;</span><span class="p">]</span>
+
+            <span class="n">p</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+            <span class="n">messages</span><span class="o">.</span><span class="n">success</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s2">&quot;Beneficiario actualizado correctamente!!&quot;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">messages</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s2">&quot;Usted no ha enviado datos...&quot;</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="n">messages</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;Error: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    
+    <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="s1">&#39;transportes:listarBeneficiario&#39;</span><span class="p">)</span>
+
+<span class="sd">&#39;&#39;&#39;Toma un beneficiario especifico y lo elimina &#39;&#39;&#39;</span>
+<span class="k">def</span> <span class="nf">eliminarBeneficiario</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="nb">id</span><span class="p">):</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">p</span> <span class="o">=</span>  <span class="n">Beneficiarios</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">pk</span> <span class="o">=</span> <span class="nb">id</span><span class="p">)</span>
+        <span class="n">p</span><span class="o">.</span><span class="n">delete</span><span class="p">()</span>
+        <span class="n">messages</span><span class="o">.</span><span class="n">success</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s2">&quot;Beneficiario eliminado correctamente!!&quot;</span><span class="p">)</span>
+    <span class="k">except</span> <span class="n">IntegrityError</span><span class="p">:</span>
+        <span class="n">messages</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s2">&quot;No puede eliminar este producto porque otros registros están relacionados con él....&quot;</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="n">messages</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;Error: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    
+    <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="s1">&#39;transportes:listarBeneficiario&#39;</span><span class="p">)</span>
+
+<span class="sd">&#39;&#39;&#39;Elabora un filtro y hace una busqueda de un campo ingresado&#39;&#39;&#39;</span>
+<span class="k">def</span> <span class="nf">buscarBeneficiario</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="n">login</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;logueo&#39;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">login</span> <span class="ow">and</span> <span class="p">(</span><span class="n">login</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;A&quot;</span> <span class="ow">or</span> <span class="n">login</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;C&quot;</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;POST&quot;</span><span class="p">:</span>
+            <span class="n">dato</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">[</span><span class="s2">&quot;buscar&quot;</span><span class="p">]</span>
+            <span class="n">q</span> <span class="o">=</span> <span class="n">Beneficiarios</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span> <span class="n">Q</span><span class="p">(</span><span class="n">nombre__icontains</span> <span class="o">=</span> <span class="n">dato</span><span class="p">))</span>
+            
+            <span class="n">paginator</span> <span class="o">=</span> <span class="n">Paginator</span><span class="p">(</span><span class="n">q</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span> <span class="c1"># Mostrar 3 registros por página...</span>
+
+            <span class="n">page_number</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">GET</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;page&#39;</span><span class="p">)</span>
+            <span class="c1">#Sobreescribir la salida de la consulta.......</span>
+            <span class="n">q</span> <span class="o">=</span> <span class="n">paginator</span><span class="o">.</span><span class="n">get_page</span><span class="p">(</span><span class="n">page_number</span><span class="p">)</span>
+            
+            <span class="n">contexto</span> <span class="o">=</span> <span class="p">{</span> <span class="s2">&quot;datosB&quot;</span><span class="p">:</span> <span class="n">q</span> <span class="p">}</span>
+            <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s1">&#39;transportes/login/beneficiarios/listar_Beneficiario_ajax.html&#39;</span><span class="p">,</span> <span class="n">contexto</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">messages</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s2">&quot;Error no envió datos...&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="s1">&#39;transportes:listarBeneficiario&#39;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">login</span> <span class="ow">and</span> <span class="p">(</span><span class="n">login</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">&quot;A&quot;</span> <span class="ow">and</span> <span class="n">login</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">&quot;C&quot;</span><span class="p">):</span>
+            <span class="n">messages</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s2">&quot;Usted no tiene autorización para acceder al módulo...&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="s1">&#39;transportes:index&#39;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">messages</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s2">&quot;Inicie sesión primero...&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="s1">&#39;transportes:loginFormulario&#39;</span><span class="p">)</span>
+
+<span class="c1">#--------------------COMENTARIOS----------------------------------------</span>
+<span class="sd">&#39;&#39;&#39;Obtener los comentarios y enviarlos a un template&#39;&#39;&#39;</span>
+<span class="k">def</span> <span class="nf">listarComentarios</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="n">login</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;logueo&#39;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">login</span><span class="p">:</span>
+        <span class="n">c</span> <span class="o">=</span> <span class="n">Comentarios</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
+        <span class="n">paginator</span> <span class="o">=</span> <span class="n">Paginator</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span> <span class="c1"># Mostrar 3 registros por página...</span>
+
+        <span class="n">page_number</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">GET</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;page&#39;</span><span class="p">)</span>
+        <span class="c1">#Sobreescribir la salida de la consulta.......</span>
+        <span class="n">c</span> <span class="o">=</span> <span class="n">paginator</span><span class="o">.</span><span class="n">get_page</span><span class="p">(</span><span class="n">page_number</span><span class="p">)</span>
+        <span class="n">contextoC</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;datosC&#39;</span><span class="p">:</span> <span class="n">c</span><span class="p">}</span>
+
+        <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s1">&#39;transportes/login/comentarios/listarComentarios.html&#39;</span><span class="p">,</span> <span class="n">contextoC</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">messages</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s2">&quot;Inicie sesión primero...&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="s1">&#39;transportes:loginFormulario&#39;</span><span class="p">)</span>
+
+<span class="sd">&#39;&#39;&#39;Retorna a al template para registrar nuevos comentarios&#39;&#39;&#39;</span>
+<span class="k">def</span> <span class="nf">registrarComentarios</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="n">login</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;logueo&#39;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">login</span><span class="p">:</span>
+        <span class="n">u</span> <span class="o">=</span> <span class="n">Cliente</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
+        <span class="n">contexto</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;cli&#39;</span><span class="p">:</span> <span class="n">u</span><span class="p">,}</span>
+        <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s1">&#39;transportes/login/comentarios/registrarComentarios.html&#39;</span><span class="p">,</span><span class="n">contexto</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">messages</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s2">&quot;Inicie sesión primero...&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="s1">&#39;transportes:loginFormulario&#39;</span><span class="p">)</span>
+
+<span class="sd">&#39;&#39;&#39;Obtener los datos ingresados y guardarlos en un nuevo registro de Comentarios&#39;&#39;&#39;</span>
+<span class="k">def</span> <span class="nf">guardarComentarios</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;POST&quot;</span><span class="p">:</span>
+            <span class="n">u</span> <span class="o">=</span>  <span class="n">Cliente</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">pk</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">[</span><span class="s2">&quot;cliente&quot;</span><span class="p">])</span>
+
+            <span class="n">q</span> <span class="o">=</span> <span class="n">Comentarios</span><span class="p">(</span>
+                <span class="n">cliente</span> <span class="o">=</span> <span class="n">u</span><span class="p">,</span>
+                <span class="n">tipo</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">[</span><span class="s2">&quot;tipo&quot;</span><span class="p">],</span>
+                <span class="n">desc</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">[</span><span class="s2">&quot;desc&quot;</span><span class="p">])</span>
+            <span class="n">q</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+
+            <span class="n">messages</span><span class="o">.</span><span class="n">success</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s2">&quot;Comentario guardado exitosamente&quot;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">messages</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s2">&quot;No se han enviado datos...&quot;</span><span class="p">)</span>
+
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="n">messages</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;Error: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    
+    <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="s1">&#39;transportes:listarComentarios&#39;</span><span class="p">)</span>
+
+<span class="sd">&#39;&#39;&#39;Retorna al formulario con la informacion del comentario y es editable&#39;&#39;&#39;</span>
+<span class="k">def</span> <span class="nf">formularioEditarComentarios</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="nb">id</span><span class="p">):</span>
+    <span class="n">login</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;logueo&#39;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">login</span><span class="p">:</span>
+        <span class="n">p</span> <span class="o">=</span> <span class="n">Comentarios</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">pk</span> <span class="o">=</span> <span class="nb">id</span><span class="p">)</span>
+        <span class="n">c</span> <span class="o">=</span> <span class="n">Cliente</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
+        <span class="n">contexto</span> <span class="o">=</span> <span class="p">{</span> <span class="s2">&quot;beneficiario&quot;</span><span class="p">:</span> <span class="n">p</span><span class="p">,</span> <span class="s2">&quot;cli&quot;</span><span class="p">:</span><span class="n">c</span> <span class="p">}</span>
+        <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s1">&#39;transportes/login/comentarios/editarComentario.html&#39;</span><span class="p">,</span> <span class="n">contexto</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">messages</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s2">&quot;Inicie sesión primero...&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="s1">&#39;transportes:loginFormulario&#39;</span><span class="p">)</span>
+
+<span class="sd">&#39;&#39;&#39;Capturar y guardar los cambios ingresados&#39;&#39;&#39;</span>
+<span class="k">def</span> <span class="nf">actualizarComentarios</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;POST&quot;</span><span class="p">:</span>
+            <span class="c1">#Obtener la instancia de producto a modificar</span>
+            <span class="n">p</span> <span class="o">=</span>  <span class="n">Comentarios</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">pk</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">])</span>
+            <span class="n">c</span> <span class="o">=</span>  <span class="n">Cliente</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">pk</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">[</span><span class="s2">&quot;cliente&quot;</span><span class="p">])</span>
+            <span class="n">p</span><span class="o">.</span><span class="n">cliente</span> <span class="o">=</span> <span class="n">c</span>
+            <span class="n">p</span><span class="o">.</span><span class="n">tipo</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">[</span><span class="s2">&quot;tipo&quot;</span><span class="p">]</span>
+            <span class="n">p</span><span class="o">.</span><span class="n">desc</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">[</span><span class="s2">&quot;desc&quot;</span><span class="p">]</span>
+           
+            <span class="n">p</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+            <span class="n">messages</span><span class="o">.</span><span class="n">success</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s2">&quot;Comentario actualizado correctamente!!&quot;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">messages</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s2">&quot;Usted no ha enviado datos...&quot;</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="n">messages</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;Error: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    
+    <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="s1">&#39;transportes:listarComentarios&#39;</span><span class="p">)</span>
+
+<span class="sd">&#39;&#39;&#39;Toma un comentario especifico y lo elimina &#39;&#39;&#39;</span>
+<span class="k">def</span> <span class="nf">eliminarComentarios</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="nb">id</span><span class="p">):</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">p</span> <span class="o">=</span> <span class="n">Comentarios</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">pk</span> <span class="o">=</span> <span class="nb">id</span><span class="p">)</span>
+        <span class="n">p</span><span class="o">.</span><span class="n">delete</span><span class="p">()</span>
+        <span class="n">messages</span><span class="o">.</span><span class="n">success</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s2">&quot;Comentario eliminado correctamente!!&quot;</span><span class="p">)</span>
+    <span class="k">except</span> <span class="n">IntegrityError</span><span class="p">:</span>
+        <span class="n">messages</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s2">&quot;No puede eliminar este producto porque otros registros están relacionados con él....&quot;</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="n">messages</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;Error: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    
+    <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="s1">&#39;transportes:listarComentarios&#39;</span><span class="p">)</span>
+
+<span class="sd">&#39;&#39;&#39;Elabora un filtro y hace una busqueda de un campo ingresado&#39;&#39;&#39;</span>
+<span class="k">def</span> <span class="nf">buscarComentarios</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="n">login</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;logueo&#39;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">login</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;POST&quot;</span><span class="p">:</span>
+            <span class="n">dato</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">[</span><span class="s2">&quot;buscar&quot;</span><span class="p">]</span>
+            <span class="n">q</span> <span class="o">=</span> <span class="n">Comentarios</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span> <span class="n">Q</span><span class="p">(</span><span class="n">tipo__icontains</span> <span class="o">=</span> <span class="n">dato</span><span class="p">))</span>
+            
+            <span class="n">paginator</span> <span class="o">=</span> <span class="n">Paginator</span><span class="p">(</span><span class="n">q</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span> <span class="c1"># Mostrar 3 registros por página...</span>
+
+            <span class="n">page_number</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">GET</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;page&#39;</span><span class="p">)</span>
+            <span class="c1">#Sobreescribir la salida de la consulta.......</span>
+            <span class="n">q</span> <span class="o">=</span> <span class="n">paginator</span><span class="o">.</span><span class="n">get_page</span><span class="p">(</span><span class="n">page_number</span><span class="p">)</span>
+            
+            <span class="n">contexto</span> <span class="o">=</span> <span class="p">{</span> <span class="s2">&quot;datosC&quot;</span><span class="p">:</span> <span class="n">q</span> <span class="p">}</span>
+            <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s1">&#39;transportes/login/comentarios/listar_Comentarios_ajax.html&#39;</span><span class="p">,</span> <span class="n">contexto</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">messages</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s2">&quot;Error no envió datos...&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="s1">&#39;transportes:listarComentarios&#39;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">messages</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s2">&quot;Inicie sesión primero...&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="s1">&#39;transportes:loginFormulario&#39;</span><span class="p">)</span>
+
+<span class="c1">#--------------------SERVICIOS----------------------------------------</span>
+<span class="sd">&#39;&#39;&#39;Obtener los servicios y enviarlos a un template&#39;&#39;&#39;</span>
+<span class="k">def</span> <span class="nf">listarServicios</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="n">login</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;logueo&#39;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">login</span> <span class="ow">and</span> <span class="p">(</span><span class="n">login</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;A&quot;</span><span class="p">):</span>
+        <span class="n">t</span> <span class="o">=</span> <span class="n">Servicios</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
+        <span class="n">paginator</span> <span class="o">=</span> <span class="n">Paginator</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span> <span class="c1"># Mostrar 3 registros por página...</span>
+
+        <span class="n">page_number</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">GET</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;page&#39;</span><span class="p">)</span>
+        <span class="c1">#Sobreescribir la salida de la consulta.......</span>
+        <span class="n">t</span> <span class="o">=</span> <span class="n">paginator</span><span class="o">.</span><span class="n">get_page</span><span class="p">(</span><span class="n">page_number</span><span class="p">)</span>
+        <span class="n">contextoT</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;datosT&#39;</span><span class="p">:</span> <span class="n">t</span><span class="p">}</span>
+
+        <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s1">&#39;transportes/login/servicios/listarServicios.html&#39;</span><span class="p">,</span> <span class="n">contextoT</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">login</span> <span class="ow">and</span> <span class="p">(</span><span class="n">login</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">&quot;A&quot;</span><span class="p">):</span>
+            <span class="n">messages</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s2">&quot;Usted no tiene autorización para acceder al módulo...&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="s1">&#39;transportes:index&#39;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">messages</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s2">&quot;Inicie sesión primero...&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="s1">&#39;transportes:loginFormulario&#39;</span><span class="p">)</span>
+
+<span class="sd">&#39;&#39;&#39;Retorna a al template para registrar nuevos servicios&#39;&#39;&#39;</span>
+<span class="k">def</span> <span class="nf">registrarServicios</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="n">login</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;logueo&#39;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">login</span> <span class="ow">and</span> <span class="p">(</span><span class="n">login</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;A&quot;</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s1">&#39;transportes/login/servicios/registrarServicios.html&#39;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">login</span> <span class="ow">and</span> <span class="p">(</span><span class="n">login</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">&quot;A&quot;</span><span class="p">):</span>
+            <span class="n">messages</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s2">&quot;Usted no tiene autorización para acceder al módulo...&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="s1">&#39;transportes:index&#39;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">messages</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s2">&quot;Inicie sesión primero...&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="s1">&#39;transportes:loginFormulario&#39;</span><span class="p">)</span>
+
+<span class="sd">&#39;&#39;&#39;Obtener los datos ingresados y guardarlos en un nuevo registro de servicios&#39;&#39;&#39;</span>
+<span class="k">def</span> <span class="nf">guardarServicios</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;POST&quot;</span><span class="p">:</span>
+            <span class="n">q</span> <span class="o">=</span> <span class="n">Servicios</span><span class="p">(</span><span class="n">nombre</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">[</span><span class="s2">&quot;nombre&quot;</span><span class="p">],</span><span class="n">caracteristicas</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">[</span><span class="s2">&quot;caracteristicas&quot;</span><span class="p">])</span>
+            <span class="n">q</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+
+            <span class="n">messages</span><span class="o">.</span><span class="n">success</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s2">&quot;servicio guardado exitosamente&quot;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">messages</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s2">&quot;No se han enviado datos...&quot;</span><span class="p">)</span>
+
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="n">messages</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;Error: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    
+    <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="s1">&#39;transportes:listarServicios&#39;</span><span class="p">)</span>
+
+<span class="sd">&#39;&#39;&#39;Retorna al formulario con la informacion del servicio y es editable&#39;&#39;&#39;</span>
+<span class="k">def</span> <span class="nf">formularioEditarServicios</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="nb">id</span><span class="p">):</span>
+    <span class="n">login</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;logueo&#39;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">login</span> <span class="ow">and</span> <span class="p">(</span><span class="n">login</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;A&quot;</span><span class="p">):</span>
+        <span class="n">p</span> <span class="o">=</span> <span class="n">Servicios</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">pk</span> <span class="o">=</span> <span class="nb">id</span><span class="p">)</span>
+        <span class="n">contexto</span> <span class="o">=</span> <span class="p">{</span> <span class="s2">&quot;servicios&quot;</span><span class="p">:</span> <span class="n">p</span> <span class="p">}</span>
+        <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s1">&#39;transportes/login/servicios/editarServicios.html&#39;</span><span class="p">,</span> <span class="n">contexto</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">login</span> <span class="ow">and</span> <span class="p">(</span><span class="n">login</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">&quot;A&quot;</span><span class="p">):</span>
+            <span class="n">messages</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s2">&quot;Usted no tiene autorización para acceder al módulo...&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="s1">&#39;transportes:index&#39;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">messages</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s2">&quot;Inicie sesión primero...&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="s1">&#39;transportes:loginFormulario&#39;</span><span class="p">)</span>
+
+<span class="sd">&#39;&#39;&#39;Capturar y guardar los cambios ingresados&#39;&#39;&#39;</span>
+<span class="k">def</span> <span class="nf">actualizarServicios</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;POST&quot;</span><span class="p">:</span>
+            <span class="c1">#Obtener la instancia de producto a modificar</span>
+            <span class="n">p</span> <span class="o">=</span>  <span class="n">Servicios</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">pk</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">])</span>
+            
+            <span class="n">p</span><span class="o">.</span><span class="n">nombre</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">[</span><span class="s2">&quot;nombre&quot;</span><span class="p">]</span>
+            <span class="n">p</span><span class="o">.</span><span class="n">caracteristicas</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">[</span><span class="s2">&quot;caracteristicas&quot;</span><span class="p">]</span>
+            <span class="n">p</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+            <span class="n">messages</span><span class="o">.</span><span class="n">success</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s2">&quot;servicio actualizado correctamente!!&quot;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">messages</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s2">&quot;Usted no ha enviado datos...&quot;</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="n">messages</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;Error: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    
+    <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="s1">&#39;transportes:listarServicios&#39;</span><span class="p">)</span>
+
+<span class="sd">&#39;&#39;&#39;Toma un beneficiario especifico y lo elimina &#39;&#39;&#39;</span>
+<span class="k">def</span> <span class="nf">eliminarServicios</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="nb">id</span><span class="p">):</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">p</span> <span class="o">=</span> <span class="n">Servicios</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">pk</span> <span class="o">=</span> <span class="nb">id</span><span class="p">)</span>
+        <span class="n">p</span><span class="o">.</span><span class="n">delete</span><span class="p">()</span>
+        <span class="n">messages</span><span class="o">.</span><span class="n">success</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s2">&quot;servicio eliminado correctamente!!&quot;</span><span class="p">)</span>
+    <span class="k">except</span> <span class="n">IntegrityError</span><span class="p">:</span>
+        <span class="n">messages</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s2">&quot;No puede eliminar este producto porque otros registros están relacionados con él....&quot;</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="n">messages</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;Error: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    
+    <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="s1">&#39;transportes:listarServicios&#39;</span><span class="p">)</span>
+
+<span class="sd">&#39;&#39;&#39;Elabora un filtro y hace una busqueda de un campo ingresado&#39;&#39;&#39;</span>
+<span class="k">def</span> <span class="nf">buscarServicios</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="n">login</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;logueo&#39;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">login</span> <span class="ow">and</span> <span class="p">(</span><span class="n">login</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;A&quot;</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;POST&quot;</span><span class="p">:</span>
+            <span class="n">dato</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">[</span><span class="s2">&quot;buscar&quot;</span><span class="p">]</span>
+            <span class="n">q</span> <span class="o">=</span> <span class="n">Servicios</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span> <span class="n">Q</span><span class="p">(</span><span class="n">nombre__icontains</span> <span class="o">=</span> <span class="n">dato</span><span class="p">))</span>
+            
+            <span class="n">paginator</span> <span class="o">=</span> <span class="n">Paginator</span><span class="p">(</span><span class="n">q</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span> <span class="c1"># Mostrar 3 registros por página...</span>
+
+            <span class="n">page_number</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">GET</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;page&#39;</span><span class="p">)</span>
+            <span class="c1">#Sobreescribir la salida de la consulta.......</span>
+            <span class="n">q</span> <span class="o">=</span> <span class="n">paginator</span><span class="o">.</span><span class="n">get_page</span><span class="p">(</span><span class="n">page_number</span><span class="p">)</span>
+            
+            <span class="n">contexto</span> <span class="o">=</span> <span class="p">{</span> <span class="s2">&quot;datosT&quot;</span><span class="p">:</span> <span class="n">q</span> <span class="p">}</span>
+            <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s1">&#39;transportes/login/servicios/listar_Servicios_ajax.html&#39;</span><span class="p">,</span> <span class="n">contexto</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">messages</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s2">&quot;Error no envió datos...&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="s1">&#39;transportes:listarServicios&#39;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">login</span> <span class="ow">and</span> <span class="p">(</span><span class="n">login</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">&quot;A&quot;</span><span class="p">):</span>
+            <span class="n">messages</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s2">&quot;Usted no tiene autorización para acceder al módulo...&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="s1">&#39;transportes:index&#39;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">messages</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s2">&quot;Inicie sesión primero...&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="s1">&#39;transportes:loginFormulario&#39;</span><span class="p">)</span>
+
+
+
+<span class="c1">#--------------------PETICIONES----------------------------------------</span>
+<span class="sd">&#39;&#39;&#39;Obtener los peticiones y enviarlos a un template&#39;&#39;&#39;</span>
+<span class="k">def</span> <span class="nf">listarPeticiones</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="n">login</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;logueo&#39;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">login</span> <span class="ow">and</span> <span class="p">(</span><span class="n">login</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;A&quot;</span> <span class="ow">or</span> <span class="n">login</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;C&quot;</span><span class="p">):</span>
+        <span class="n">p</span> <span class="o">=</span> <span class="n">Peticiones</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
+        <span class="n">paginator</span> <span class="o">=</span> <span class="n">Paginator</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span> <span class="c1"># Mostrar 3 registros por página...</span>
+
+        <span class="n">page_number</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">GET</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;page&#39;</span><span class="p">)</span>
+        <span class="c1">#Sobreescribir la salida de la consulta.......</span>
+        <span class="n">p</span> <span class="o">=</span> <span class="n">paginator</span><span class="o">.</span><span class="n">get_page</span><span class="p">(</span><span class="n">page_number</span><span class="p">)</span>
+        <span class="n">contextoP</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;datosP&#39;</span><span class="p">:</span> <span class="n">p</span><span class="p">}</span>
+
+        <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s1">&#39;transportes/login/peticiones/listarPeticiones.html&#39;</span><span class="p">,</span> <span class="n">contextoP</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">login</span> <span class="ow">and</span> <span class="p">(</span><span class="n">login</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">&quot;A&quot;</span> <span class="ow">and</span> <span class="n">login</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">&quot;C&quot;</span><span class="p">):</span>
+            <span class="n">messages</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s2">&quot;Usted no tiene autorización para acceder al módulo...&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="s1">&#39;transportes:index&#39;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">messages</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s2">&quot;Inicie sesión primero...&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="s1">&#39;transportes:loginFormulario&#39;</span><span class="p">)</span>
+
+<span class="sd">&#39;&#39;&#39;Retorna a al template para registrar nuevos peticiones&#39;&#39;&#39;</span>
+<span class="k">def</span> <span class="nf">registrarPeticiones</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="n">login</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;logueo&#39;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">login</span> <span class="ow">and</span> <span class="p">(</span><span class="n">login</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;A&quot;</span> <span class="ow">or</span> <span class="n">login</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;C&quot;</span><span class="p">):</span>
+        <span class="n">c</span> <span class="o">=</span> <span class="n">Cliente</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="n">Servicios</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
+        <span class="n">contexto</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;cli&#39;</span><span class="p">:</span><span class="n">c</span><span class="p">,</span><span class="s1">&#39;servicios&#39;</span><span class="p">:</span><span class="n">s</span><span class="p">}</span>
+        <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s1">&#39;transportes/login/peticiones/registrarPeticiones.html&#39;</span><span class="p">,</span><span class="n">contexto</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">login</span> <span class="ow">and</span> <span class="p">(</span><span class="n">login</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">&quot;A&quot;</span> <span class="ow">and</span> <span class="n">login</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">&quot;C&quot;</span><span class="p">):</span>
+            <span class="n">messages</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s2">&quot;Usted no tiene autorización para acceder al módulo...&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="s1">&#39;transportes:index&#39;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">messages</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s2">&quot;Inicie sesión primero...&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="s1">&#39;transportes:loginFormulario&#39;</span><span class="p">)</span>
+
+<span class="sd">&#39;&#39;&#39;Obtener los datos ingresados y guardarlos en un nuevo registro de peticion&#39;&#39;&#39;</span>
+<span class="k">def</span> <span class="nf">guardarPeticiones</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">c</span> <span class="o">=</span>  <span class="n">Cliente</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">pk</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">[</span><span class="s2">&quot;cliente&quot;</span><span class="p">])</span>
+        <span class="n">s</span> <span class="o">=</span>  <span class="n">Servicios</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">pk</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">[</span><span class="s2">&quot;servicios&quot;</span><span class="p">])</span>
+
+
+        <span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;POST&quot;</span><span class="p">:</span>
+            <span class="n">q</span> <span class="o">=</span> <span class="n">Peticiones</span><span class="p">(</span>
+                <span class="n">cliente</span> <span class="o">=</span> <span class="n">c</span><span class="p">,</span>
+                <span class="n">servicios</span> <span class="o">=</span> <span class="n">s</span><span class="p">,</span>
+                <span class="n">direccion</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">[</span><span class="s2">&quot;direccion&quot;</span><span class="p">],</span>
+                <span class="n">colegio</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">[</span><span class="s2">&quot;colegio&quot;</span><span class="p">],</span>
+                <span class="n">horario</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">[</span><span class="s2">&quot;horario&quot;</span><span class="p">],</span>
+                <span class="n">comentario_add</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">[</span><span class="s2">&quot;comentario_add&quot;</span><span class="p">])</span>
+            <span class="n">q</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+
+            <span class="n">messages</span><span class="o">.</span><span class="n">success</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s2">&quot;Peticion guardado exitosamente&quot;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">messages</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s2">&quot;No se han enviado datos...&quot;</span><span class="p">)</span>
+
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="n">messages</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;Error: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    
+    <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="s1">&#39;transportes:listarPeticiones&#39;</span><span class="p">)</span>
+
+<span class="sd">&#39;&#39;&#39;Retorna al formulario con la informacion de la peticion y es editable&#39;&#39;&#39;</span>
+<span class="k">def</span> <span class="nf">formularioEditarPeticiones</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="nb">id</span><span class="p">):</span>
+    <span class="n">login</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;logueo&#39;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">login</span> <span class="ow">and</span> <span class="p">(</span><span class="n">login</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;A&quot;</span> <span class="ow">or</span> <span class="n">login</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;C&quot;</span><span class="p">):</span>
+        <span class="n">p</span> <span class="o">=</span> <span class="n">Peticiones</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">pk</span> <span class="o">=</span> <span class="nb">id</span><span class="p">)</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="n">Servicios</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
+        <span class="n">c</span> <span class="o">=</span> <span class="n">Cliente</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
+        <span class="n">contexto</span> <span class="o">=</span> <span class="p">{</span> <span class="s2">&quot;peticiones&quot;</span><span class="p">:</span> <span class="n">p</span><span class="p">,</span> <span class="s2">&quot;cli&quot;</span><span class="p">:</span><span class="n">c</span><span class="p">,</span> <span class="s1">&#39;servicios&#39;</span><span class="p">:</span><span class="n">s</span> <span class="p">}</span>
+        <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s1">&#39;transportes/login/peticiones/editarPeticiones.html&#39;</span><span class="p">,</span> <span class="n">contexto</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">login</span> <span class="ow">and</span> <span class="p">(</span><span class="n">login</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">&quot;A&quot;</span> <span class="ow">and</span> <span class="n">login</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">&quot;C&quot;</span><span class="p">):</span>
+            <span class="n">messages</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s2">&quot;Usted no tiene autorización para acceder al módulo...&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="s1">&#39;transportes:index&#39;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">messages</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s2">&quot;Inicie sesión primero...&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="s1">&#39;transportes:loginFormulario&#39;</span><span class="p">)</span>
+
+<span class="sd">&#39;&#39;&#39;Capturar y guardar los cambios ingresados&#39;&#39;&#39;</span>
+<span class="k">def</span> <span class="nf">actualizarPeticiones</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;POST&quot;</span><span class="p">:</span>
+            <span class="c1">#Obtener la instancia de producto a modificar</span>
+            <span class="n">p</span> <span class="o">=</span>  <span class="n">Peticiones</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">pk</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">])</span>
+            <span class="n">s</span> <span class="o">=</span> <span class="n">Servicios</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">pk</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">[</span><span class="s2">&quot;servicios&quot;</span><span class="p">])</span>
+            <span class="n">c</span> <span class="o">=</span> <span class="n">Cliente</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">pk</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">[</span><span class="s2">&quot;cliente&quot;</span><span class="p">])</span>
+
+
+            <span class="n">p</span><span class="o">.</span><span class="n">cliente</span> <span class="o">=</span> <span class="n">c</span>
+            <span class="n">p</span><span class="o">.</span><span class="n">servicios</span> <span class="o">=</span> <span class="n">s</span>
+            <span class="n">p</span><span class="o">.</span><span class="n">direccion</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">[</span><span class="s2">&quot;direccion&quot;</span><span class="p">]</span>
+            <span class="n">p</span><span class="o">.</span><span class="n">colegio</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">[</span><span class="s2">&quot;colegio&quot;</span><span class="p">]</span>
+            <span class="n">p</span><span class="o">.</span><span class="n">horario</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">[</span><span class="s2">&quot;horario&quot;</span><span class="p">]</span>
+            <span class="n">p</span><span class="o">.</span><span class="n">comentario_add</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">[</span><span class="s2">&quot;comentario_add&quot;</span><span class="p">]</span>
+           
+
+            <span class="n">p</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+            <span class="n">messages</span><span class="o">.</span><span class="n">success</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s2">&quot;Peticion actualizado correctamente!!&quot;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">messages</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s2">&quot;Usted no ha enviado datos...&quot;</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="n">messages</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;Error: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    
+    <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="s1">&#39;transportes:listarPeticiones&#39;</span><span class="p">)</span>
+
+<span class="sd">&#39;&#39;&#39;Toma una petición especifico y lo elimina &#39;&#39;&#39;</span>
+<span class="k">def</span> <span class="nf">eliminarPeticiones</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="nb">id</span><span class="p">):</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">p</span> <span class="o">=</span>  <span class="n">Peticiones</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">pk</span> <span class="o">=</span> <span class="nb">id</span><span class="p">)</span>
+        <span class="n">p</span><span class="o">.</span><span class="n">delete</span><span class="p">()</span>
+        <span class="n">messages</span><span class="o">.</span><span class="n">success</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s2">&quot;Peticion eliminado correctamente!!&quot;</span><span class="p">)</span>
+    <span class="k">except</span> <span class="n">IntegrityError</span><span class="p">:</span>
+        <span class="n">messages</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s2">&quot;No puede eliminar este producto porque otros registros están relacionados con él....&quot;</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="n">messages</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;Error: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    
+    <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="s1">&#39;transportes:listarPeticiones&#39;</span><span class="p">)</span>
+
+<span class="sd">&#39;&#39;&#39;Elabora un filtro y hace una busqueda de un campo ingresado&#39;&#39;&#39;</span>
+<span class="k">def</span> <span class="nf">buscarPeticiones</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="n">login</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;logueo&#39;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">login</span> <span class="ow">and</span> <span class="p">(</span><span class="n">login</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;A&quot;</span> <span class="ow">or</span> <span class="n">login</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;C&quot;</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;POST&quot;</span><span class="p">:</span>
+            <span class="n">dato</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">[</span><span class="s2">&quot;buscar&quot;</span><span class="p">]</span>
+            <span class="n">q</span> <span class="o">=</span> <span class="n">Peticiones</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span> <span class="n">Q</span><span class="p">(</span><span class="n">colegio__icontains</span> <span class="o">=</span> <span class="n">dato</span> <span class="p">)</span> <span class="o">|</span><span class="n">Q</span><span class="p">(</span><span class="n">direccion__icontains</span> <span class="o">=</span> <span class="n">dato</span> <span class="p">))</span>
+            
+            <span class="n">paginator</span> <span class="o">=</span> <span class="n">Paginator</span><span class="p">(</span><span class="n">q</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span> <span class="c1"># Mostrar 3 registros por página...</span>
+
+            <span class="n">page_number</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">GET</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;page&#39;</span><span class="p">)</span>
+            <span class="c1">#Sobreescribir la salida de la consulta.......</span>
+            <span class="n">q</span> <span class="o">=</span> <span class="n">paginator</span><span class="o">.</span><span class="n">get_page</span><span class="p">(</span><span class="n">page_number</span><span class="p">)</span>
+            
+            <span class="n">contexto</span> <span class="o">=</span> <span class="p">{</span> <span class="s2">&quot;datosP&quot;</span><span class="p">:</span> <span class="n">q</span> <span class="p">}</span>
+            <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s1">&#39;transportes/login/peticiones/listar_Peticiones_ajax.html&#39;</span><span class="p">,</span> <span class="n">contexto</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">messages</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s2">&quot;Error no envió datos...&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="s1">&#39;transportes:listarPeticiones&#39;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">login</span> <span class="ow">and</span> <span class="p">(</span><span class="n">login</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">&quot;A&quot;</span> <span class="ow">and</span> <span class="n">login</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">&quot;C&quot;</span><span class="p">):</span>
+            <span class="n">messages</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s2">&quot;Usted no tiene autorización para acceder al módulo...&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="s1">&#39;transportes:index&#39;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">messages</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s2">&quot;Inicie sesión primero...&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="s1">&#39;transportes:loginFormulario&#39;</span><span class="p">)</span>
+
+    
+<span class="c1">#--------------------VEHICULOS----------------------------------------</span>
+
+<span class="sd">&#39;&#39;&#39;Obtener los Vehiculos y enviarlos a un template&#39;&#39;&#39;</span>
+<span class="k">def</span> <span class="nf">listarVehiculo</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="n">login</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;logueo&#39;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">login</span> <span class="ow">and</span> <span class="p">(</span><span class="n">login</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;A&quot;</span> <span class="ow">or</span> <span class="n">login</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;P&quot;</span><span class="p">):</span>
+        <span class="n">b</span> <span class="o">=</span> <span class="n">Vehiculo</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
+        <span class="n">paginator</span> <span class="o">=</span> <span class="n">Paginator</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span> <span class="c1"># Mostrar 3 registros por página...</span>
+
+        <span class="n">page_number</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">GET</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;page&#39;</span><span class="p">)</span>
+        <span class="c1">#Sobreescribir la salida de la consulta.......</span>
+        <span class="n">v</span> <span class="o">=</span> <span class="n">paginator</span><span class="o">.</span><span class="n">get_page</span><span class="p">(</span><span class="n">page_number</span><span class="p">)</span>
+        <span class="n">contextob</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;datosV&#39;</span><span class="p">:</span> <span class="n">v</span><span class="p">}</span>
+
+        <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s1">&#39;transportes/login/vehiculo/listarVehiculo.html&#39;</span><span class="p">,</span> <span class="n">contextob</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">login</span> <span class="ow">and</span> <span class="p">(</span><span class="n">login</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">&quot;A&quot;</span> <span class="ow">and</span> <span class="n">login</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">&quot;P&quot;</span><span class="p">):</span>
+            <span class="n">messages</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s2">&quot;Usted no tiene autorización para acceder al módulo...&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="s1">&#39;transportes:index&#39;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">messages</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s2">&quot;Inicie sesión primero...&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="s1">&#39;transportes:loginFormulario&#39;</span><span class="p">)</span>
+
+<span class="sd">&#39;&#39;&#39;Retorna a al template para registrar nuevos vehiculos&#39;&#39;&#39;</span>
+<span class="k">def</span> <span class="nf">registrarVehiculo</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="n">login</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;logueo&#39;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">login</span> <span class="ow">and</span> <span class="p">(</span><span class="n">login</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;A&quot;</span> <span class="ow">or</span> <span class="n">login</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;P&quot;</span><span class="p">):</span>
+        <span class="n">u</span> <span class="o">=</span> <span class="n">Cliente</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
+        <span class="n">contexto</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;cliente&#39;</span><span class="p">:</span> <span class="n">u</span><span class="p">}</span>
+        <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s1">&#39;transportes/login/vehiculo/registrarVehiculo.html&#39;</span><span class="p">,</span> <span class="n">contexto</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">login</span> <span class="ow">and</span> <span class="p">(</span><span class="n">login</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">&quot;A&quot;</span> <span class="ow">and</span> <span class="n">login</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">&quot;P&quot;</span><span class="p">):</span>
+            <span class="n">messages</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s2">&quot;Usted no tiene autorización para acceder al módulo...&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="s1">&#39;transportes:index&#39;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">messages</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s2">&quot;Inicie sesión primero...&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="s1">&#39;transportes:loginFormulario&#39;</span><span class="p">)</span>
+
+<span class="sd">&#39;&#39;&#39;Obtener los datos ingresados y guardarlos en un nuevo registro de vehiculo&#39;&#39;&#39;</span>
+<span class="k">def</span> <span class="nf">guardarVehiculo</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;POST&quot;</span><span class="p">:</span>
+            
+            <span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">FILES</span><span class="p">:</span>
+                <span class="n">fss</span> <span class="o">=</span> <span class="n">FileSystemStorage</span><span class="p">()</span>
+                <span class="n">f</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">FILES</span><span class="p">[</span><span class="s2">&quot;foto&quot;</span><span class="p">]</span>
+                <span class="n">file</span> <span class="o">=</span> <span class="n">fss</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="s2">&quot;transportes/fotos/&quot;</span> <span class="o">+</span> <span class="n">f</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">f</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">file</span> <span class="o">=</span> <span class="s1">&#39;transportes/fotos/default.webp&#39;</span>
+                
+            <span class="n">u</span> <span class="o">=</span> <span class="n">Cliente</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">pk</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">[</span><span class="s2">&quot;cliente&quot;</span><span class="p">])</span>
+            <span class="n">q</span> <span class="o">=</span> <span class="n">Vehiculo</span><span class="p">(</span>
+                <span class="n">proveedor</span> <span class="o">=</span> <span class="n">u</span><span class="p">,</span>
+                <span class="n">placa</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">[</span><span class="s2">&quot;placa&quot;</span><span class="p">],</span>
+                <span class="n">marca</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">[</span><span class="s2">&quot;marca&quot;</span><span class="p">],</span>
+                <span class="n">color</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">[</span><span class="s2">&quot;color&quot;</span><span class="p">],</span>
+                <span class="n">foto</span> <span class="o">=</span> <span class="n">file</span><span class="p">)</span>
+            <span class="n">q</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+
+            <span class="n">messages</span><span class="o">.</span><span class="n">success</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s2">&quot;Vehiculo guardado exitosamente&quot;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">messages</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s2">&quot;No se han enviado datos...&quot;</span><span class="p">)</span>
+
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="n">messages</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;Error: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    
+    <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="s1">&#39;transportes:listarVehiculo&#39;</span><span class="p">)</span>
+
+<span class="sd">&#39;&#39;&#39;Retorna al formulario con la informacion del vehiculo y es editable&#39;&#39;&#39;</span>
+<span class="k">def</span> <span class="nf">formularioEditarVehiculo</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="nb">id</span><span class="p">):</span>
+    <span class="n">login</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;logueo&#39;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">login</span> <span class="ow">and</span> <span class="p">(</span><span class="n">login</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;A&quot;</span> <span class="ow">or</span> <span class="n">login</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;P&quot;</span><span class="p">):</span>
+        <span class="n">p</span> <span class="o">=</span> <span class="n">Vehiculo</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">pk</span> <span class="o">=</span> <span class="nb">id</span><span class="p">)</span>
+        <span class="n">c</span> <span class="o">=</span> <span class="n">Cliente</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
+        <span class="n">contexto</span> <span class="o">=</span> <span class="p">{</span> <span class="s2">&quot;vehiculo&quot;</span><span class="p">:</span> <span class="n">p</span><span class="p">,</span> <span class="s2">&quot;cliente&quot;</span><span class="p">:</span><span class="n">c</span> <span class="p">}</span>
+        <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s1">&#39;transportes/login/vehiculo/editarVehiculo.html&#39;</span><span class="p">,</span> <span class="n">contexto</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">login</span> <span class="ow">and</span> <span class="p">(</span><span class="n">login</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">&quot;A&quot;</span> <span class="ow">and</span> <span class="n">login</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">&quot;P&quot;</span><span class="p">):</span>
+            <span class="n">messages</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s2">&quot;Usted no tiene autorización para acceder al módulo...&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="s1">&#39;transportes:index&#39;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">messages</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s2">&quot;Inicie sesión primero...&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="s1">&#39;transportes:loginFormulario&#39;</span><span class="p">)</span>
+
+<span class="sd">&#39;&#39;&#39;Capturar y guardar los cambios ingresados&#39;&#39;&#39;</span>
+<span class="k">def</span> <span class="nf">actualizarVehiculo</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;POST&quot;</span><span class="p">:</span>
+            <span class="c1">#Obtener la instancia de producto a modificar</span>
+            <span class="n">p</span> <span class="o">=</span>  <span class="n">Vehiculo</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">pk</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">])</span>
+            <span class="n">c</span> <span class="o">=</span>  <span class="n">Cliente</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">pk</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">[</span><span class="s2">&quot;cliente&quot;</span><span class="p">])</span>
+            <span class="n">p</span><span class="o">.</span><span class="n">cliente</span> <span class="o">=</span> <span class="n">c</span>
+            <span class="n">p</span><span class="o">.</span><span class="n">placa</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">[</span><span class="s2">&quot;placa&quot;</span><span class="p">]</span>
+            <span class="n">p</span><span class="o">.</span><span class="n">marca</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">[</span><span class="s2">&quot;marca&quot;</span><span class="p">]</span>
+            <span class="n">p</span><span class="o">.</span><span class="n">color</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">[</span><span class="s2">&quot;color&quot;</span><span class="p">]</span>
+            <span class="n">p</span><span class="o">.</span><span class="n">foto</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">[</span><span class="s2">&quot;foto&quot;</span><span class="p">]</span>
+
+            <span class="n">p</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+            <span class="n">messages</span><span class="o">.</span><span class="n">success</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s2">&quot;Vehiculo actualizado correctamente!!&quot;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">messages</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s2">&quot;Usted no ha enviado datos...&quot;</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="n">messages</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;Error: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    
+    <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="s1">&#39;transportes:listarVehiculo&#39;</span><span class="p">)</span>
+
+<span class="sd">&#39;&#39;&#39;Toma un vehiculo especifico y lo elimina &#39;&#39;&#39;</span>
+<span class="k">def</span> <span class="nf">eliminarVehiculo</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="nb">id</span><span class="p">):</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">p</span> <span class="o">=</span><span class="n">Vehiculo</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">pk</span> <span class="o">=</span> <span class="nb">id</span><span class="p">)</span>
+        
+         <span class="c1">#Obtener ruta de la foto</span>
+        <span class="n">foto</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">BASE_DIR</span><span class="p">)</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">foto</span><span class="o">.</span><span class="n">url</span><span class="p">)</span> 
+        
+        <span class="c1">#Averiguar si existe la foto en esa ruta obtenida</span>
+        <span class="k">if</span> <span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">foto</span><span class="p">):</span>
+            <span class="c1">#Caso especial no borrar foto por defecto.</span>
+            <span class="k">if</span> <span class="n">p</span><span class="o">.</span><span class="n">foto</span><span class="o">.</span><span class="n">url</span> <span class="o">!=</span> <span class="s1">&#39;/uploads/transportes/fotos/default.webp&#39;</span><span class="p">:</span>
+                <span class="n">remove</span><span class="p">(</span><span class="n">foto</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">messages</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s2">&quot;No se encontró la foto...&quot;</span><span class="p">)</span>
+            
+        <span class="n">p</span><span class="o">.</span><span class="n">delete</span><span class="p">()</span>
+        <span class="n">messages</span><span class="o">.</span><span class="n">success</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s2">&quot;Vehiculo eliminado correctamente!!&quot;</span><span class="p">)</span>
+    <span class="k">except</span> <span class="n">IntegrityError</span><span class="p">:</span>
+        <span class="n">messages</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s2">&quot;No puede eliminar este producto porque otros registros están relacionados con él....&quot;</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="n">messages</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;Error: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    
+    <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="s1">&#39;transportes:listarVehiculo&#39;</span><span class="p">)</span>
+
+<span class="sd">&#39;&#39;&#39;Elabora un filtro y hace una busqueda de un campo ingresado&#39;&#39;&#39;</span>
+<span class="k">def</span> <span class="nf">buscarVehiculo</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="n">login</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;logueo&#39;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">login</span> <span class="ow">and</span> <span class="p">(</span><span class="n">login</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;A&quot;</span> <span class="ow">or</span> <span class="n">login</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;P&quot;</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;POST&quot;</span><span class="p">:</span>
+            <span class="n">dato</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">[</span><span class="s2">&quot;buscar&quot;</span><span class="p">]</span>
+            <span class="n">q</span> <span class="o">=</span> <span class="n">Vehiculo</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span> <span class="n">Q</span><span class="p">(</span><span class="n">id__icontains</span> <span class="o">=</span> <span class="n">dato</span><span class="p">))</span>
+            
+            <span class="n">paginator</span> <span class="o">=</span> <span class="n">Paginator</span><span class="p">(</span><span class="n">q</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span> <span class="c1"># Mostrar 3 registros por página...</span>
+
+            <span class="n">page_number</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">GET</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;page&#39;</span><span class="p">)</span>
+            <span class="c1">#Sobreescribir la salida de la consulta.......</span>
+            <span class="n">q</span> <span class="o">=</span> <span class="n">paginator</span><span class="o">.</span><span class="n">get_page</span><span class="p">(</span><span class="n">page_number</span><span class="p">)</span>
+            
+            <span class="n">contexto</span> <span class="o">=</span> <span class="p">{</span> <span class="s2">&quot;datosV&quot;</span><span class="p">:</span> <span class="n">q</span> <span class="p">}</span>
+            <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s1">&#39;transportes/login/vehiculo/listar_Vehiculo_ajax.html&#39;</span><span class="p">,</span> <span class="n">contexto</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">messages</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s2">&quot;Error no envió datos...&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="s1">&#39;transportes:listarVehiculo&#39;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">login</span> <span class="ow">and</span> <span class="p">(</span><span class="n">login</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">&quot;A&quot;</span> <span class="ow">and</span> <span class="n">login</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">&quot;P&quot;</span><span class="p">):</span>
+            <span class="n">messages</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s2">&quot;Usted no tiene autorización para acceder al módulo...&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="s1">&#39;transportes:index&#39;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">messages</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s2">&quot;Inicie sesión primero...&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="s1">&#39;transportes:loginFormulario&#39;</span><span class="p">)</span>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Derechos de autor 2022, Alejandro Muñoz Lezcano.
+
+    </p>
+  </div>
+    
+    
+    
+    Construido con <a href="https://www.sphinx-doc.org/">Sphinx</a> usando un
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">tema</a>
+    
+    proporcionado por <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
