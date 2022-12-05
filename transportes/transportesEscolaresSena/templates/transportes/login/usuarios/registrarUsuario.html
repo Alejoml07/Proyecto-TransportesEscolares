@@ -22,7 +22,24 @@
         <div class="mb-3 mt-3">
             <label for="" class="form-label">Apellido:</label>
             <input type="text" class="form-control" id="" placeholder="Ingrese Apellido" name="apellido">
-          </div>
+        </div>
+        <div class="mb-3 mt-3">
+          <label>Usuario</label>
+          <input type="text" name="usuario" class="form-control" /><br>
+        </div>
+        <div class="mb-3 mt-3">
+          <label>contraseña</label>
+          <input type="password" name="clave" class="form-control" /><br>
+        </div>
+        <div class="mb-3 mt-3">
+          <label>Rol</label>
+          <select name="rol" class="form-control">
+              <option>Seleccione</option>
+              <option value="A">Administrador</option>
+              <option value="P">Proveedor</option>
+              <option value="C" selected="">Cliente</option>
+          </select>
+        </div>
           <div class="mb-3 mt-3">
             <label for="" class="form-label">Correo:</label>
             <input type="email" class="form-control" id="email" placeholder="Ingrese Correo" name="correo">
@@ -39,6 +56,8 @@
             <label for="" class="form-label">Fecha de Nacimiento:</label>
             <input type="date" class="form-control" id="" placeholder="Ingrese Direccion" name="fecha_nacimiento">
           </div>
+          <label>Foto</label>
+          <input type="file" name="foto" class="form-control" accept="image/*" /><br>
           
         
         <button type="submit" class="btn btn-primary">Enviar</button>

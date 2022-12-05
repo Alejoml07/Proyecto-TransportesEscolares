@@ -1,0 +1,96 @@
+{% load static %}
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ver Usuario</title>
+    <link href="{% static 'transportes/css/bootstrap.min.css' %}" rel="stylesheet">
+    <link href="{% static 'transportes/css/stylePerfil.css' %}" rel="stylesheet">
+</head>
+<body style="background-color: grey;">
+    <form method="post">
+        <div>
+            <nav class="navbar navbar-expand-lg navbar-light">
+              <div class="container">
+                <a href="{% url 'transportes:indexProveedor' %}"><img  src="../../static/transportes/assets/logo.png"  width="200px" height="200px" class="img-fluid rounded-start" alt="..." ></a>
+                <button class="navbar-toggler bg-white" type="button" data-toggle="collapse" data-bs-target="#miLista">
+                  <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse justify-content-end" id="miLista">
+                  <ul class="navbar-nav">
+                    
+      
+                    <div class="dropdown">
+                      <a href="#" class="d-flex align-items-center text-black text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
+                        <strong>{{request.session.logueo.0}}</strong>
+                      </a>
+                      <ul class="dropdown-menu dropdown-menu-dark text-small shadow" aria-labelledby="dropdownUser1">
+                        <li><a class="dropdown-item" href="#">Perfil</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="{% url 'transportes:listarComentariosProv' %}">Comentarios</a></li>
+                        <li><a class="dropdown-item" href="{% url 'transportes:listarPeticionesProv' %}">Peticiones</a></li>
+                        <li><a class="dropdown-item" href="{% url 'transportes:listarVehiculoProv' %}">Vehiculos</a></li>
+
+                        <li><a class="dropdown-item" href="{% url 'transportes:logout' %}">Sign out</a></li>
+                      </ul>
+                    </div>
+                    
+                  </ul>
+                </div>
+              </div>
+            </nav>
+          </div>
+      {%csrf_token%}
+      <input type="hidden" name="id" value="{{ cli.id }}"/>
+      <div class="container rounded bg-white mt-5 mb-5">
+        <div class="row">
+            <div class="col-md-3 border-right">
+                <div class="d-flex flex-column align-items-center text-center p-3 py-5">
+                  <img class="rounded-circle mt-5" width="150px" src="{{cli.foto.url}}">
+                  <span class="font-weight-bold"></span>
+                  <span class="text-black-50">{{ cli.usuario }}</span><span> </span></div>
+            </div>
+            <div class="col-md-5 border-right">
+                <div class="p-3 py-5">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h4 class="text-right">Perfil {{cli.nombre}}</h4>
+                    </div>
+                    <div class="row mt-2">
+                        <div class="col-md-6"><label class="labels">Nombre</label>
+                          <input  type="text" class="form-control" value="{{cli.nombre}}"></div>
+                        <div class="col-md-6"><label class="labels">Apellido</label>
+                          <input  type="text" class="form-control" value="{{cli.apellido}}"></div>
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col-md-12"><label class="labels">Rol</label>
+                          <input type="text" class="form-control" value="{{request.session.logueo.4}}"></div>
+                        <div class="col-md-12"><label class="labels">Correo</label>
+                          <input type="text" class="form-control" value="{{cli.correo}}"></div>
+                        <div class="col-md-12"><label class="labels">Direccion</label>
+                          <input type="text" class="form-control" value="{{cli.direccion}}"></div>
+                        <div class="col-md-12"><label class="labels">Postcode</label>
+                          <input type="text" class="form-control" value="{{ cli.fecha_nacimiento }}"></div>
+                    </div><br><br>
+                    <div class="mt-5 text-center"><button class="btn btn-primary " type="button">Editar</button></div>
+                
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+    </div>
+    
+      
+
+       
+      <script src="{% static 'transportes/js/popper.min.js' %}"></script>
+      <script src="{% static 'transportes/js/bootstrap.min.js' %}"></script>
+      <script src="{% static 'transportes/js/libreria.js' %}"></script>
+
+      
+</body>
+</html>

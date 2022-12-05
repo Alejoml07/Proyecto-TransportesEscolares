@@ -35,24 +35,7 @@
 
         </form>
         <div id="respuesta">
-        {%for t in datos %}
-        <div class="container">
-        <div class="card mb-3" style="max-width: 1200px; max-height: 1000px;" >
-            <div class="row g-0">
-              <div class="col-md-4">
-                <img src="..." class="img-fluid rounded-start" alt="...">
-              </div>
-              <div class="col-md-8">
-                <div class="card-body">
-                  <h5 class="card-title">{{t.nombre}}{{t.apellido}}</h5>
-                  <p class="card-text">Correo: {{t.correo}}</p>
-                  <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        {%endfor%}
+       
 
         <table class="table table-striped">
             <thead>
@@ -64,6 +47,7 @@
                     <th>direccion</th>
                     <th>documento</th>
                     <th>fecha_nacimiento</th>
+                    <th>foto</th>
                     <th>Operaciones</th>
 
 
@@ -81,6 +65,9 @@
                     <td>{{t.direccion}}</td>
                     <td>{{t.documento}}</td>
                     <td>{{t.fecha_nacimiento}}</td>
+                    <td>
+                      <img src="{{t.foto.url}}" width="10%">
+                  </td>
                     <td>
                         <div class="d-grid gap-2 d-md-block">
                             <a class="btn btn-dark" href="{% url 'transportes:eliminarUsuario' t.id %}">Eliminar</a>

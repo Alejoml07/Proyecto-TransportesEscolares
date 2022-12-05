@@ -6,11 +6,11 @@ class Cliente(models.Model):
     """Cliente de la aplicacion, dividido en 3 roles
     """
     nombre = models.CharField(max_length= 100)
-    apellido = models.CharField(max_length= 100)
+    apellido = models.CharField(max_length= 200)
     correo = models.EmailField(max_length= 250, null=True, blank=True)
     direccion = models.CharField(max_length= 100)
     documento = models.IntegerField()
-    fecha_nacimiento = models.DateTimeField()
+    fecha_nacimiento = models.DateField()
     usuario = models.CharField(max_length=100, default = "u1")
     clave = models.CharField(max_length=254, default = "12345")
     ROLES = (
@@ -19,6 +19,7 @@ class Cliente(models.Model):
         ('P', 'Proveedor'),
     )
     rol = models.CharField(max_length=100, choices=ROLES, default='C')
+    foto = models.ImageField(upload_to = 'transportes/fotos', default='transportes/fotos/default.webp')
 
 
     def __str__(self):

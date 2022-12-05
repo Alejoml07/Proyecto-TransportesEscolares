@@ -24,15 +24,7 @@
               {% endfor %}
           </select>
         </div>
-        <div class="mb-3 mt-3">
-          <label>Proveedor</label>
-          <select class="form-control" name="Proveedor">
-              <option value="">Seleccione:</option>
-              {% for c in proveedores %}
-                  <option value="{{ c.id }}" >{{ c.id}} - {{ c.nombre }}</option>
-              {% endfor %}
-          </select>
-        </div>
+        
         <div class="mb-3 mt-3">
           <label for="" class="form-label">Tipo:</label>
           <input type="text" class="form-control" id="" placeholder="Ingrese Nombre" name="tipo">

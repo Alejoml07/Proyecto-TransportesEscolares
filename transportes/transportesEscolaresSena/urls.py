@@ -5,6 +5,8 @@ from . import views
 app_name= "transportes"
 urlpatterns = [
     path('', views.indexPrimary, name = "indexPrimary"),
+    path('verLogueo', views.verLogueo, name = "verLogueo"),
+    path('indexProveedor/', views.indexProveedor, name = "indexProveedor"),
     path('index/', views.index, name = "index"),
     path('loginFormulario/', views.loginFormulario, name="loginFormulario" ),
     path('login/', views.login, name="login" ),
@@ -32,6 +34,7 @@ urlpatterns = [
 
     #--------------------------Comentarios-----------------------------------
     path('listarComentarios/', views.listarComentarios, name = "listarComentarios"),
+    path('listarComentariosProv/', views.listarComentariosProv, name = "listarComentariosProv"),
     path('registrarComentarios/', views.registrarComentarios, name = "registrarComentarios"),
     path('guardarComentarios/', views.guardarComentarios, name = "guardarComentarios"),
     path('formularioEditarComentarios/<int:id>', views.formularioEditarComentarios, name = "formularioEditarComentarios"),
@@ -50,6 +53,7 @@ urlpatterns = [
 
     #--------------------------Peticiones-----------------------------------
     path('listarPeticiones/', views.listarPeticiones, name = "listarPeticiones"),
+    path('listarPeticionesProv/', views.listarPeticionesProv, name = "listarPeticionesProv"),
     path('registrarPeticiones/', views.registrarPeticiones, name = "registrarPeticiones"),
     path('guardarPeticiones/', views.guardarPeticiones, name = "guardarPeticiones"),
     path('formularioEditarPeticiones/<int:id>', views.formularioEditarPeticiones, name = "formularioEditarPeticiones"),
@@ -59,6 +63,7 @@ urlpatterns = [
 
     #--------------------------Vehiculo-----------------------------------
     path('listarVehiculo/', views.listarVehiculo, name = "listarVehiculo"),
+    path('listarVehiculoProv/', views.listarVehiculoProv, name = "listarVehiculoProv"),
     path('registrarVehiculo/', views.registrarVehiculo, name = "registrarVehiculo"),
     path('guardarVehiculo/', views.guardarVehiculo, name = "guardarVehiculo"),
     path('formularioEditarVehiculo/<int:id>', views.formularioEditarVehiculo, name = "formularioEditarVehiculo"),

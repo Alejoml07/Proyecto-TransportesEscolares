@@ -55,7 +55,9 @@
                     <td>{{t.marca}}</td>
                     <td>{{t.color}}</td>
                     <td>{{t.cliente}}</td>
-                    <td>{{t.foto}}</td>
+                    <td>
+                        <img src="{{t.foto.url}}" width="10%">
+                    </td>
                     <td>
                         <div class="d-grid gap-2 d-md-block">
                             <a class="btn btn-dark" href="{% url 'transportes:eliminarVehiculo' t.id %}">Eliminar</a>

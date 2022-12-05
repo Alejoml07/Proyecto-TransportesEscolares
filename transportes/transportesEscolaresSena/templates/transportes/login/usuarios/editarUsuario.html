@@ -40,7 +40,9 @@
             <label for="" class="form-label">Fecga de Nacimiento:</label>
             <input type="date" class="form-control" id="" value="{{ cliente.fecha_nacimiento }}" name="fecha_nacimiento">
           </div>
-          
+          <label>Foto</label>
+          <strong><span> - actual: {{ cliente.foto }}</span></strong>
+          <input type="file" name="foto" class="form-control" accept="image/*" /><br>
         
         <button type="submit" class="btn btn-primary">Enviar</button>
       </form>

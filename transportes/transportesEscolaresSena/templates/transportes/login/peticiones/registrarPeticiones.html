@@ -16,14 +16,17 @@
     <form action="{%url 'transportes:guardarPeticiones'%}" method="post">
         {%csrf_token%}
         <div class="mb-3 mt-3">
-          <label>Cliente</label>
-          <select class="form-control" name="cliente">
-              <option value="">Seleccione:</option>
-              {% for c in cli %}
-                  <option value="{{ c.id }}">{{ c.id}} - {{ c.nombre }}</option>
-              {% endfor %}
-          </select>
-        </div>
+          <div class="mb-3 mt-3">
+            <label>Cliente</label>
+            <select class="form-control" name="cliente">
+                <option value="">Seleccione:</option>
+                {% for c in cli %}
+                  {%if c.rol == 'P'%}
+                    <option value="{{ c.id }}"{% if peticiones.cliente.id == c.id %}selected=""{% endif %}>{{ c.id}} - {{ c.nombre }}</option>
+                  {% endif %}
+                {% endfor %}
+            </select>
+          </div>
         <div class="mb-3 mt-3">
           <label>Servicios</label>
           <select class="form-control" name="servicios">

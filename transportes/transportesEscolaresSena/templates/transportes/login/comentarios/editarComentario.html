@@ -15,22 +15,23 @@
     <h3>Agregar Usuario</h3>
     <form action="{%url 'transportes:actualizarComentarios'%}" method="post">
         {%csrf_token%}
+        <input type="hidden" name="id" value="{{ comentarios.id }}"/>
         <div class="mb-3 mt-3">
             <label>Cliente</label>
             <select class="form-control" name="cliente">
                 <option value="">Seleccione:</option>
-                {% for c in cli %}
-                    <option value="{{ c.id }}"{% if comentarios.cliente.id == c.id %}selected=""{% endif %}>{{ c.id}} - {{ c.nombre }}</option>
+                {% for c in cliente %}
+                    <option value="{{ c.id }}" {% if comentarios.cliente.id == c.id %}selected=""{% endif %}>{{ c.id}} - {{ c.nombre }}</option>
                 {% endfor %}
             </select>
         </div>
         <div class="mb-3 mt-3">
           <label for="" class="form-label">Tipo:</label>
-          <input type="text" class="form-control" id="" placeholder="Ingrese Nombre" name="tipo">
+          <input type="text" class="form-control" id="" value="{{ comentarios.tipo }}" name="tipo">
         </div>
         <div class="mb-3 mt-3">
           <label for="" class="form-label">descripcion:</label>
-          <input type="text" class="form-control" id="" placeholder="Ingrese Apellido" name="desc">
+          <input type="text" class="form-control" id="" value="{{ comentarios.desc }}" name="desc">
         </div>
         
         

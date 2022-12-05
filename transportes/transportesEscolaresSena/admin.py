@@ -7,8 +7,12 @@ from .models import Cliente,Beneficiarios,Comentarios,Servicios,Peticiones,Vehic
 # Register your models here.
 @admin.register(Cliente)
 class ClienteAdmin(admin.ModelAdmin):
-    list_display = ('id','nombre', 'apellido', 'correo', 'direccion', 'documento','fecha_nacimiento', 'usuario', 'clave', 'rol' ) 
+    list_display = ('id','nombre', 'apellido', 'correo', 'direccion', 'documento','fecha_nacimiento', 'usuario', 'clave', 'rol','foto', 'verFoto' ) 
     search_fields = ['id','nombre']
+    
+    def verFoto(self, obj):
+        from django.utils.html import format_html
+        return format_html('<img src="{}" width="20%" />'.format(obj.foto.url))
 
 @admin.register(Beneficiarios)
 class BeneficiariosAdmin(admin.ModelAdmin):

@@ -7,39 +7,41 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Transportes Escolares</title>
     <link href="{% static 'transportes/css/bootstrap.min.css' %}" rel="stylesheet">
-    <link href="{% static 'transportes/css/styleIndex.css' %}" rel="stylesheet">
 
 </head>
 <body>
-  <div>
-      <nav class="navbar navbar-expand-lg navbar-light">
+  <div id = "nav-base">
+      <nav class="navbar navbar-expand-lg navbar-light" style="background-color: grey;">
         <div class="container">
-          <a class="navbar-brand" href="{% url 'transportes:index' %}">Logoooo</a>
+          <a href="{% url 'transportes:index' %}"><img  src="../../static/transportes/assets/logo.png"  width="200px" height="200px" class="img-fluid rounded-start" alt="..." ></a>
           <button class="navbar-toggler bg-white" type="button" data-toggle="collapse" data-bs-target="#miLista">
             <span class="navbar-toggler-icon"></span>
           </button>
           <div class="collapse navbar-collapse justify-content-end" id="miLista">
             <ul class="navbar-nav">
-              {% if request.session.logueo.2 == 'A' or request.session.logueo.2 == 'C'  %}
+              {% if request.session.logueo.2 == 'A' %}
               <li class="nav-item mb-3">
                 <a class="nav-link text-black" href="{% url 'transportes:listarUsuario' %}">Usuarios</a>
               </li>
               {% endif %}
-              {% if request.session.logueo.2 == 'A' or request.session.logueo.2 == 'C'  %}
+              {% if request.session.logueo.2 == 'A' %}
               <li class="nav-item mb-3">
                 <a class="nav-link text-black" href="{% url 'transportes:listarBeneficiario' %}">Beneficiario</a>
               </li>
               {% endif %}
+              {% if request.session.logueo.2 == 'A' %}
               <li class="nav-item mb-3">
                 <a class="nav-link text-black" href="{% url 'transportes:listarComentarios' %}">Comentarios</a>
               </li>
+              {% endif %}
+
               {% if request.session.logueo.2 == 'A' %}
               <li class="nav-item mb-3">
                 <a class="nav-link text-black" href="{% url 'transportes:listarServicios' %}">Servicios</a>
               </li>
               {% endif %}
 
-              {% if request.session.logueo.2 == 'A' or request.session.logueo.2 == 'C'  %}
+              {% if request.session.logueo.2 == 'A' or request.session.logueo.2 == 'P'  %}
               <li class="nav-item mb-3">
                 <a class="nav-link text-black" href="{% url 'transportes:listarPeticiones' %}">Peticiones</a>
               </li>
@@ -53,15 +55,15 @@
 
               <div class="dropdown">
                 <a href="#" class="d-flex align-items-center text-black text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
-                  <img src="https://github.com/mdo.png" alt="" width="32" height="32" class="rounded-circle me-2">
-                  <strong>Usuario</strong>
+                  <strong>{{request.session.logueo.0}}</strong>
                 </a>
                 <ul class="dropdown-menu dropdown-menu-dark text-small shadow" aria-labelledby="dropdownUser1">
-                  <li><a class="dropdown-item" href="#">New project...</a></li>
-                  <li><a class="dropdown-item" href="#">Settings</a></li>
-                  <li><a class="dropdown-item" href="#">Profile</a></li>
+                  <li><a class="dropdown-item" href="{% url 'transportes:verLogueo' %}">Perfil</a></li>
                   <li><hr class="dropdown-divider"></li>
+                  <li><a class="dropdown-item" href="{% url 'transportes:listarBeneficiario' %}">Beneficiario</a></li>
+
                   <li><a class="dropdown-item" href="{% url 'transportes:logout' %}">Sign out</a></li>
+
                 </ul>
               </div>
               
@@ -70,11 +72,10 @@
         </div>
       </nav>
     </div>
-      
+      <script src="{% static 'transportes/js/jquery-3.6.1.min.jss' %}"></script>
       <script src="{% static 'transportes/js/popper.min.js' %}"></script>
       <script src="{% static 'transportes/js/bootstrap.min.js' %}"></script>
       <script src="{% static 'transportes/js/libreria.js' %}"></script>
-
 
 
 

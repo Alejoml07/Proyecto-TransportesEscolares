@@ -1,0 +1,132 @@
+{% load static %}
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ver Usuario</title>
+    <link href="{% static 'transportes/css/bootstrap.min.css' %}" rel="stylesheet">
+    <link href="{% static 'transportes/css/stylePerfil.css' %}" rel="stylesheet">
+</head>
+<body style="background-color: grey;">
+    <nav class="navbar navbar-expand-lg navbar-light" style="background-color: grey;">
+        <div class="container">
+            <a href="{% url 'transportes:index' %}"><img  src="../../../../static/transportes/assets/logo.png"  width="200px" height="200px" class="img-fluid rounded-start" alt="..." ></a>
+            <button class="navbar-toggler bg-white" type="button" data-toggle="collapse" data-bs-target="#miLista">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse justify-content-end" id="miLista">
+            <ul class="navbar-nav">
+              {% if request.session.logueo.2 == 'A' %}
+              <li class="nav-item mb-3">
+                <a class="nav-link text-black" href="{% url 'transportes:listarUsuario' %}">Usuarios</a>
+              </li>
+              {% endif %}
+              {% if request.session.logueo.2 == 'A' %}
+              <li class="nav-item mb-3">
+                <a class="nav-link text-black" href="{% url 'transportes:listarBeneficiario' %}">Beneficiario</a>
+              </li>
+              {% endif %}
+              {% if request.session.logueo.2 == 'A' %}
+              <li class="nav-item mb-3">
+                <a class="nav-link text-black" href="{% url 'transportes:listarComentarios' %}">Comentarios</a>
+              </li>
+              {% endif %}
+
+              {% if request.session.logueo.2 == 'A' %}
+              <li class="nav-item mb-3">
+                <a class="nav-link text-black" href="{% url 'transportes:listarServicios' %}">Servicios</a>
+              </li>
+              {% endif %}
+
+              {% if request.session.logueo.2 == 'A' or request.session.logueo.2 == 'P'  %}
+              <li class="nav-item mb-3">
+                <a class="nav-link text-black" href="{% url 'transportes:listarPeticiones' %}">Peticiones</a>
+              </li>
+              {% endif %}
+
+              {% if request.session.logueo.2 == 'A' or request.session.logueo.2 == 'P'  %}
+               <li class="nav-item mb-3">
+                <a class="nav-link text-black" href="{% url 'transportes:listarVehiculo' %}">Vehiculo</a>
+              </li>
+              {% endif %}
+
+              <div class="dropdown">
+                <a href="#" class="d-flex align-items-center text-black text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
+                  <strong>{{request.session.logueo.0}}</strong>
+                </a>
+                <ul class="dropdown-menu dropdown-menu-dark text-small shadow" aria-labelledby="dropdownUser1">
+                  <li><a class="dropdown-item" href="{% url 'transportes:verLogueo' %}">Perfil</a></li>
+                  <li><hr class="dropdown-divider"></li>
+                  <li><a class="dropdown-item" href="{% url 'transportes:listarBeneficiario' %}">Beneficiario</a></li>
+
+                  <li><a class="dropdown-item" href="{% url 'transportes:logout' %}">Sign out</a></li>
+
+                </ul>
+              </div>
+              
+            </ul>
+          </div>
+        </div>
+      </nav>
+    <form action="{%url 'transportes:actualizarUsuario'%}" method="post">
+      {%csrf_token%}
+      <input type="hidden" name="id" value="{{ cli.id }}"/>
+      <div class="container rounded bg-white mt-5 mb-5">
+        <div class="row">
+            <div class="col-md-3 border-right">
+                <div class="d-flex flex-column align-items-center text-center p-3 py-5">
+                  <img class="rounded-circle mt-5" width="150px" id= "foto" src="{{cli.foto.url}}">
+                  <input type="file" name="foto" class="form-control" accept="image/*" /><br>
+                  <span class="font-weight-bold">{{ cli.nombre }}</span>
+                  <span class="text-black-50">{{ cli.rol }}</span><span> </span></div>
+            </div>
+            <div class="col-md-5 border-right">
+                <div class="p-3 py-5">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h4 class="text-right">Profile Settings</h4>
+                    </div>
+                    <div class="row mt-2">
+                        <div class="col-md-6"><label class="labels">Nombre</label>
+                          <input  type="text" class="form-control" value="{{ cli.nombre }}" name="nombre"></div>
+                        <div class="col-md-6"><label class="labels">Apellido</label>
+                          <input  type="text" class="form-control" value="{{ cli.apellido }}" name="apellido"></div>
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col-md-12"><label class="labels">Documento</label>
+                          <input type="text" class="form-control" value="{{ cli.documento }}"  name="documento"></div>
+                        <div class="col-md-12"><label class="labels">Direccion</label>
+                          <input  type="text" class="form-control" value="{{ cli.direccion }}" name="direccion" ></div>
+                        <div class="col-md-12"><label class="labels">Correo</label>
+                          <input  type="text" class="form-control" value="{{ cli.correo }}" name="correo"></div>
+                        <div class="col-md-12"><label class="labels">Fecha de Nacimiento</label>
+                          <input  type="date" class="form-control" value="{{ cli.fecha_nacimiento }}" name="fecha_nacimiento"></div>
+                    </div><br><br>
+                    
+                     
+                        
+                    <button type="submit" class="btn btn-primary">Enviar</button>
+                </div>
+            </div>
+            
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+    </div>
+    
+      
+      
+
+       
+      <script src="{% static 'transportes/js/popper.min.js' %}"></script>
+      <script src="{% static 'transportes/js/bootstrap.min.js' %}"></script>
+      <script src="{% static 'transportes/js/libreria.js' %}"></script>
+
+      
+</body>
+</html>

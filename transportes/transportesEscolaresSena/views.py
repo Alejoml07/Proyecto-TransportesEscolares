@@ -28,15 +28,42 @@ from os import remove, path
 def indexPrimary(request):
     return render(request, 'transportes/indexPrimary.html')
 
+def indexProveedor(request):
+
+    login = request.session.get('logueo', False)
+    if login and (login[2] == "A" or login[2] == "P"):
+        u = Cliente.objects.get(id = login[3] )
+        contexto = {'cli' : u}
+        return render(request, 'transportes/indexProveedor.html',contexto)
+    else:
+        if login and (login[2] != "A" and login[2] != "P"):
+            messages.warning(request, "Usted no tiene autorización para acceder al módulo...")
+            return redirect('transportes:index')
+        else:
+            messages.warning(request, "Inicie sesión primero...")
+            return redirect('transportes:loginFormulario')
+
+def verLogueo(request):
+    login = request.session.get('logueo', False)
+    if login:
+        u = Cliente.objects.get(id = login[3])
+        contexto = {'cli' : u}
+        return render(request, 'transportes/login/usuarios/verLogueo.html',contexto)
+    else:
+        messages.warning(request, "Inicie sesión primero...")
+        return redirect('transportes:loginFormulario')
+
 def index(request):
     login = request.session.get('logueo', False)
     if login:
+        v = Vehiculo.objects.all()
         q = Cliente.objects.all()
+        u = Cliente.objects.get(id = login[3] )
         paginator = Paginator(q, 10) # Mostrar 10 registros por página...
         page_number = request.GET.get('page')
         #Sobreescribir la salida de la consulta.......
         q = paginator.get_page(page_number)
-        contexto = {'datos': q}
+        contexto = {'datos': q, 'vehiculo':v,'cli':u}
         return render(request, 'transportes/index.html',contexto)
     else:
         messages.warning(request, "Inicie sesión primero...")
@@ -52,11 +79,14 @@ def login(request):
             passw = request.POST["clave"]
 
             q = Cliente.objects.get(usuario = user, clave = passw)
-            # crear la sesión
-            request.session["logueo"] = [q.nombre, q.apellido, q.rol, q.id, q.get_rol_display()]
-
+            # crear la sesión 
+            request.session["logueo"] = [q.nombre, q.apellido, q.rol, q.id, q.get_rol_display(),]
             messages.success(request, "Bienvenido!!")
-            return redirect('transportes:index')     
+            if q.rol == "P" :                
+                return redirect('transportes:indexProveedor')
+            else:
+                return redirect('transportes:index')
+   
 
         except Cliente.DoesNotExist:
             messages.error(request, "Usuario o contraseña incorrectos...")
@@ -107,14 +137,8 @@ def registrarUsuario(request):
     Returns:
         template:`transportes/login/usuarios/registrarUsuario.html`
     """
-    #Obtener la sesión
-    login = request.session.get('logueo', False)
-    if login:
-        return render(request, 'transportes/login/usuarios/registrarUsuario.html')
-    else:
-        messages.warning(request, "Inicie sesión primero...")
-        return redirect('transportes:loginFormulario')
-
+    return render(request, 'transportes/login/usuarios/registrarUsuario.html')
+    
 
 def guardarUsuario(request):
     """Obtener los datos ingresados y guardarlos en un nuevo registro de usuario
@@ -127,15 +151,24 @@ def guardarUsuario(request):
     """
     try:
         if request.method == "POST":
+            if request.FILES:
+                fss = FileSystemStorage()
+                f = request.FILES["foto"]
+                file = fss.save("transportes/fotos/" + f.name, f)
+            else:
+                file = 'transportes/fotos/default.webp'
             
             q = Cliente(nombre = request.POST["nombre"],
                         apellido = request.POST["apellido"],
                         correo = request.POST["correo"],
                         direccion = request.POST["direccion"],
                         documento = request.POST["documento"],
-                        fecha_nacimiento = request.POST["fecha_nacimiento"])
+                        fecha_nacimiento = request.POST["fecha_nacimiento"],
+                        foto = file,
+                        usuario = request.POST["usuario"],
+                        clave= request.POST["clave"],
+                        rol = request.POST["rol"])
             q.save()
-
             messages.success(request, "Usuario guardado exitosamente")
         else:
             messages.warning(request, "No se han enviado datos...")
@@ -143,18 +176,11 @@ def guardarUsuario(request):
     except Exception as e:
         messages.error(request, f"Error: {e}")
     
-    return redirect('transportes:listarUsuario')
+    return redirect('transportes:indexPrimary')
+        
 
 '''Retorna a un template con la información de un usuario especifico'''
-def verUsuario(request, id):
-    login = request.session.get('logueo', False)
-    if login:
-        p = Cliente.objects.get(pk = id)
-        contexto = { "cliente": p }
-        return render(request, 'transportes/login/usuarios/verUsuario.html', contexto)
-    else:
-        messages.warning(request, "Inicie sesión primero...")
-        return redirect('transportes:loginFormulario')
+
 
 
 '''Retorna al formulario con la informacion del cliente y es editable'''
@@ -181,6 +207,10 @@ def actualizarUsuario(request):
             p.direccion = request.POST["direccion"]
             p.documento = request.POST["documento"]
             p.fecha_nacimiento = request.POST["fecha_nacimiento"]
+            p.foto = request.POST["foto"]
+            p.usuario = request.POST["usuario"]
+            p.clave= request.POST["clave"]
+            p.rol = request.POST["rol"]
 
             
             p.save()
@@ -196,6 +226,16 @@ def actualizarUsuario(request):
 def eliminarUsuario(request, id):
     try:
         p =  Cliente.objects.get(pk = id)
+         #Obtener ruta de la foto
+        foto = str(BASE_DIR) + str(p.foto.url) 
+        
+        #Averiguar si existe la foto en esa ruta obtenida
+        if path.exists(foto):
+            #Caso especial no borrar foto por defecto.
+            if p.foto.url != '/uploads/transportes/fotos/default.webp':
+                remove(foto)
+        else:
+            messages.warning(request, "No se encontró la foto...")
         p.delete()
         messages.success(request, "Usuario eliminado correctamente!!")
     except IntegrityError:
@@ -212,13 +252,10 @@ def buscarProducto(request):
         if request.method == "POST":
             dato = request.POST["buscar"]
             q = Cliente.objects.filter( Q(nombre__icontains = dato))
-            
             paginator = Paginator(q, 3) # Mostrar 3 registros por página...
-
             page_number = request.GET.get('page')
             #Sobreescribir la salida de la consulta.......
             q = paginator.get_page(page_number)
-            
             contexto = { "datos": q }
             return render(request, 'transportes/login/usuarios/listar_Usuario_ajax.html', contexto)
         else:
@@ -319,6 +356,7 @@ def actualizarBeneficiario(request):
             p.apellido = request.POST["apellido"]
             p.documento = request.POST["documento"]
             p.fecha_nacimiento = request.POST["fecha_nacimiento"]
+            
 
             p.save()
             messages.success(request, "Beneficiario actualizado correctamente!!")
@@ -388,7 +426,28 @@ def listarComentarios(request):
         messages.warning(request, "Inicie sesión primero...")
         return redirect('transportes:loginFormulario')
 
-'''Retorna a al template para registrar nuevos comentarios'''
+def listarComentariosProv(request):
+    login = request.session.get('logueo', False)
+
+    if login and (login[2] == "A" or login[2] == "P"):       
+        dato = login[0]
+        c = Comentarios.objects.filter( Q(cliente__nombre = dato))
+        paginator = Paginator(c, 3) # Mostrar 3 registros por página...
+
+        page_number = request.GET.get('page')
+        #Sobreescribir la salida de la consulta.......
+        c = paginator.get_page(page_number)
+        contextoC = {'datosC': c}
+
+        return render(request, 'transportes/login/comentarios/listar_ComentariosProv.html', contextoC)
+    else:
+        if login and (login[2] != "A" and login[2] != "P"):
+            messages.warning(request, "Usted no tiene autorización para acceder al módulo...")
+            return redirect('transportes:index')
+        else:
+            messages.warning(request, "Inicie sesión primero...")
+            return redirect('transportes:loginFormulario')
+
 def registrarComentarios(request):
     login = request.session.get('logueo', False)
     if login:
@@ -426,7 +485,7 @@ def formularioEditarComentarios(request, id):
     if login:
         p = Comentarios.objects.get(pk = id)
         c = Cliente.objects.all()
-        contexto = { "beneficiario": p, "cli":c }
+        contexto = { "comentarios": p, "cliente":c }
         return render(request, 'transportes/login/comentarios/editarComentario.html', contexto)
     else:
         messages.warning(request, "Inicie sesión primero...")
@@ -471,7 +530,7 @@ def buscarComentarios(request):
     if login:
         if request.method == "POST":
             dato = request.POST["buscar"]
-            q = Comentarios.objects.filter( Q(tipo__icontains = dato))
+            q = Comentarios.objects.filter( Q(cliente__nombre = dato))
             
             paginator = Paginator(q, 3) # Mostrar 3 registros por página...
 
@@ -487,6 +546,8 @@ def buscarComentarios(request):
     else:
         messages.warning(request, "Inicie sesión primero...")
         return redirect('transportes:loginFormulario')
+
+        
 
 #--------------------SERVICIOS----------------------------------------
 '''Obtener los servicios y enviarlos a un template'''
@@ -619,7 +680,7 @@ def buscarServicios(request):
 def listarPeticiones(request):
     login = request.session.get('logueo', False)
 
-    if login and (login[2] == "A" or login[2] == "C"):
+    if login and (login[2] == "A" or login[2] == "P"):
         p = Peticiones.objects.all()
         paginator = Paginator(p, 3) # Mostrar 3 registros por página...
 
@@ -637,10 +698,33 @@ def listarPeticiones(request):
             messages.warning(request, "Inicie sesión primero...")
             return redirect('transportes:loginFormulario')
 
+def listarPeticionesProv(request):
+    login = request.session.get('logueo', False)
+
+    if login and (login[2] == "A" or login[2] == "P"):
+        dato = login[0]
+        p = Peticiones.objects.filter( Q(cliente__nombre = dato))
+        paginator = Paginator(p, 3) # Mostrar 3 registros por página...
+
+        page_number = request.GET.get('page')
+        #Sobreescribir la salida de la consulta.......
+        p = paginator.get_page(page_number)
+        contextoP = {'datosP': p}
+
+        return render(request, 'transportes/login/peticiones/listarPeticionesProv.html', contextoP)
+    else:
+        if login and (login[2] != "A" and login[2] != "C"):
+            messages.warning(request, "Usted no tiene autorización para acceder al módulo...")
+            return redirect('transportes:index')
+        else:
+            messages.warning(request, "Inicie sesión primero...")
+            return redirect('transportes:loginFormulario')           
+
 '''Retorna a al template para registrar nuevos peticiones'''
 def registrarPeticiones(request):
     login = request.session.get('logueo', False)
     if login and (login[2] == "A" or login[2] == "C"):
+        
         c = Cliente.objects.all()
         s = Servicios.objects.all()
         contexto = {'cli':c,'servicios':s}
@@ -677,7 +761,7 @@ def guardarPeticiones(request):
     except Exception as e:
         messages.error(request, f"Error: {e}")
     
-    return redirect('transportes:listarPeticiones')
+    return redirect('transportes:index')
 
 '''Retorna al formulario con la informacion de la peticion y es editable'''
 def formularioEditarPeticiones(request, id):
@@ -780,6 +864,28 @@ def listarVehiculo(request):
         contextob = {'datosV': v}
 
         return render(request, 'transportes/login/vehiculo/listarVehiculo.html', contextob)
+    else:
+        if login and (login[2] != "A" and login[2] != "P"):
+            messages.warning(request, "Usted no tiene autorización para acceder al módulo...")
+            return redirect('transportes:index')
+        else:
+            messages.warning(request, "Inicie sesión primero...")
+            return redirect('transportes:loginFormulario')
+
+def listarVehiculoProv(request):
+    login = request.session.get('logueo', False)
+
+    if login and (login[2] == "A" or login[2] == "P"):
+        dato = login[0]
+        b = Vehiculo.objects.filter( Q(cliente__nombre = dato))
+        paginator = Paginator(b, 3) # Mostrar 3 registros por página...
+
+        page_number = request.GET.get('page')
+        #Sobreescribir la salida de la consulta.......
+        v = paginator.get_page(page_number)
+        contextob = {'datosV': v}
+
+        return render(request, 'transportes/login/vehiculo/listarVehiculoProv.html', contextob)
     else:
         if login and (login[2] != "A" and login[2] != "P"):
             messages.warning(request, "Usted no tiene autorización para acceder al módulo...")
@@ -922,3 +1028,15 @@ def buscarVehiculo(request):
         else:
             messages.warning(request, "Inicie sesión primero...")
             return redirect('transportes:loginFormulario')
+
+def verUsuario(request, id):
+    login = request.session.get('logueo', False)
+    if login:
+        p = Cliente.objects.get(pk = id)
+        c = Comentarios.objects.all()
+        v = Vehiculo.objects.all()
+        contexto = { "cli": p, "comentarios":c, 'vehiculo':v}
+        return render(request, 'transportes/login/usuarios/verUsuario.html', contexto)
+    else:
+        messages.warning(request, "Inicie sesión primero...")
+        return redirect('transportes:loginFormulario')

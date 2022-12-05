@@ -13,7 +13,7 @@
 <body>
     {%block contenedor%}
     <h3>Agregar Vehiculo</h3>
-    <form action="{%url 'transportes:guardarVehiculo'%}" method="post">
+    <form action="{%url 'transportes:guardarVehiculo'%}" method="post" enctype="multipart/form-data">
         {%csrf_token%}
 
         <div class="mb-3 mt-3">

@@ -1,4 +1,3 @@
-{%extends "transportes/base.html"%}
 {% load static %}
 
 
@@ -9,42 +8,165 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ver Usuario</title>
+    <link href="{% static 'transportes/css/bootstrap.min.css' %}" rel="stylesheet">
+    <link href="{% static 'transportes/css/stylePerfil.css' %}" rel="stylesheet">
 </head>
-<body>
-    {%block contenedor%}
-    <h3>Perfil</h3>
-    <form method="post">
-        {%csrf_token%}
-        <input type="hidden" name="id" value="{{ cliente.id }}"/>
-        <div class="mb-3 mt-3">
-          <label for="" class="form-label">Nombre:</label>
-          <input type="text" class="form-control" id="" value="{{ cliente.nombre }}" name="nombre">
+<body style="background-color: grey;">
+    <nav class="navbar navbar-expand-lg navbar-light" style="background-color: grey;">
+      <div class="container">
+        <a href="{% url 'transportes:index' %}"><img  src="../../../../static/transportes/assets/logo.png"  width="200px" height="200px" class="img-fluid rounded-start" alt="..." ></a>
+        <button class="navbar-toggler bg-white" type="button" data-toggle="collapse" data-bs-target="#miLista">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse justify-content-end" id="miLista">
+          <ul class="navbar-nav">
+            {% if request.session.logueo.2 == 'A' %}
+            <li class="nav-item mb-3">
+              <a class="nav-link text-black" href="{% url 'transportes:listarUsuario' %}">Usuarios</a>
+            </li>
+            {% endif %}
+            {% if request.session.logueo.2 == 'A' %}
+            <li class="nav-item mb-3">
+              <a class="nav-link text-black" href="{% url 'transportes:listarBeneficiario' %}">Beneficiario</a>
+            </li>
+            {% endif %}
+            {% if request.session.logueo.2 == 'A' %}
+            <li class="nav-item mb-3">
+              <a class="nav-link text-black" href="{% url 'transportes:listarComentarios' %}">Comentarios</a>
+            </li>
+            {% endif %}
+
+            {% if request.session.logueo.2 == 'A' %}
+            <li class="nav-item mb-3">
+              <a class="nav-link text-black" href="{% url 'transportes:listarServicios' %}">Servicios</a>
+            </li>
+            {% endif %}
+
+            {% if request.session.logueo.2 == 'A' or request.session.logueo.2 == 'P'  %}
+            <li class="nav-item mb-3">
+              <a class="nav-link text-black" href="{% url 'transportes:listarPeticiones' %}">Peticiones</a>
+            </li>
+            {% endif %}
+
+            {% if request.session.logueo.2 == 'A' or request.session.logueo.2 == 'P'  %}
+             <li class="nav-item mb-3">
+              <a class="nav-link text-black" href="{% url 'transportes:listarVehiculo' %}">Vehiculo</a>
+            </li>
+            {% endif %}
+
+            <div class="dropdown">
+              <a href="#" class="d-flex align-items-center text-black text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
+                <strong>{{request.session.logueo.0}}</strong>
+              </a>
+              <ul class="dropdown-menu dropdown-menu-dark text-small shadow" aria-labelledby="dropdownUser1">
+                <li><a class="dropdown-item" href="{% url 'transportes:verLogueo' %}">Perfil</a></li>
+                <li><hr class="dropdown-divider"></li>
+                <li><a class="dropdown-item" href="{% url 'transportes:listarBeneficiario' %}">Beneficiario</a></li>
+
+                <li><a class="dropdown-item" href="{% url 'transportes:logout' %}">Sign out</a></li>
+
+              </ul>
+            </div>
+            
+          </ul>
         </div>
-        <div class="mb-3 mt-3">
-            <label for="" class="form-label">Apellido:</label>
-            <input type="text" class="form-control" id="" value="{{ cliente.apellido }}" name="apellido">
-          </div>
-          <div class="mb-3 mt-3">
-            <label for="" class="form-label">Correo:</label>
-            <input type="email" class="form-control" id="email" value="{{ cliente.correo }}" name="correo">
-          </div>
-          <div class="mb-3 mt-3">
-            <label for="" class="form-label">Direccion:</label>
-            <input type="text" class="form-control" id="" value="{{ cliente.direccion }}" name="direccion">
-          </div>
-          <div class="mb-3 mt-3">
-            <label for="" class="form-label">Documento:</label>
-            <input type="number" class="form-control" id="" value="{{ cliente.documento }}" name="documento">
-          </div>
-          <div class="mb-3 mt-3">
-            <label for="" class="form-label">Fecha de Nacimiento:</label>
-            <input type="date" class="form-control" id="" value="{{ cliente.fecha_nacimiento }}" name="fecha_nacimiento">
-          </div>
-          
-        
-        <button type="submit" class="btn btn-primary">Enviar</button>
-      </form>
-      {%endblock%}
+      </div>
+    </nav>
+    <form method="post">
+
+      {%csrf_token%}
+      <input type="hidden" name="id" value="{{ cli.id }}"/>
+      <div class="container rounded bg-white mt-5 mb-5">
+        <div class="row">
+            <div class="col-md-3 border-right">
+                <div class="d-flex flex-column align-items-center text-center p-3 py-5">
+                  <img class="rounded-circle mt-5" width="150px" src="{{cli.foto.url}}">
+                  <span class="font-weight-bold">{{ cli.nombre }}</span>
+                  <span class="text-black-50">{{ cli.rol }}</span><span> </span></div>
+            </div>
+            <div class="col-md-5 border-right">
+                <div class="p-3 py-5">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h4 class="text-right">Profile Settings</h4>
+                    </div>
+                    <div class="row mt-2">
+                        <div class="col-md-6"><label class="labels">Name</label>
+                          <input readonly type="text" class="form-control" value="{{ cli.nombre }}"></div>
+                        <div class="col-md-6"><label class="labels">Surname</label>
+                          <input readonly type="text" class="form-control" value="{{ cli.apellido }}"></div>
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col-md-12"><label class="labels">Mobile Number</label>
+                          <input readonly type="text" class="form-control" value="{{ cli.documento }}"></div>
+                        <div class="col-md-12"><label class="labels">Address Line 1</label>
+                          <input readonly type="text" class="form-control" value="{{ cli.direccion }}"></div>
+                        <div class="col-md-12"><label class="labels">Address Line 2</label>
+                          <input readonly type="text" class="form-control" value="{{ cli.correo }}"></div>
+                        <div class="col-md-12"><label class="labels">Postcode</label>
+                          <input readonly type="text" class="form-control" value="{{ cli.fecha_nacimiento }}"></div>
+                    </div><br><br>
+                    
+                      <table class="table table-hover">
+                        <thead>
+                          <tr>
+                            <th>Comentarios</th>
+                          </tr>
+                        </thead>
+                        
+                            {%for t in comentarios %}
+                            <tbody>
+                              <tr>
+                                <td {% if cli.nombre == t.cliente.nombre %}{% endif %} >{{t.cliente.nombre}}</td>
+                              </tr>
+                            </tbody>
+                            {%endfor%}
+                        
+                      </table>
+                      <a class="btn btn-primary" href="{% url 'transportes:registrarPeticiones' %}">Realizar Petición</a>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="p-3 py-5">
+                  <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h4 class="text-right">Vehiculo</h4>
+                </div>                    
+                <table class="table table-hover">
+                      <thead>
+                        <tr>
+                          <th>placa</th>
+                          <th>marca</th>
+                          <th>color</th>
+
+
+                        </tr>
+                      </thead>
+                      
+                          {%for v in vehiculo %}
+                          <tbody>
+                            <tr>
+                              <td {% if cli.id == v.cliente.id %}{% endif %} >{{v.placa}}</td>
+                              <td {% if cli.id == v.cliente.id %}{% endif %} >{{v.marca}}</td>
+                              <td {% if cli.id == v.cliente.id %}{% endif %} >{{v.color}}</td>
+                            </tr>
+                          </tbody>
+                          {%endfor%}
+                      
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+    </div>
+    
+      
+      -->
+
+       
+      <script src="{% static 'transportes/js/popper.min.js' %}"></script>
+      <script src="{% static 'transportes/js/bootstrap.min.js' %}"></script>
+      <script src="{% static 'transportes/js/libreria.js' %}"></script>
+
       
 </body>
 </html>
