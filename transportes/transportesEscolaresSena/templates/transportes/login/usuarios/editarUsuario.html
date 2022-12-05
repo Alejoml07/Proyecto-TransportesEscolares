@@ -29,16 +29,10 @@
             <label>Usuario</label>
             <input type="text" class="form-control" id="" value="{{ cliente.usuario }}" name="usuario">
           </div>
-
-          <div class="mb-3 mt-3">
-            <label>contraseña</label>
-            <input type="password" class="form-control" id="" value="{{ cliente.clave }}" name="clave">
-          </div>
           <div class="mb-3 mt-3">
             <label>Rol</label>
             <select value="{{ cliente.rol }}" name="rol" class="form-control">
                 <option >Seleccione</option>
-                <option value="A">Administrador</option>
                 <option value="P">Proveedor</option>
                 <option value="C" >Cliente</option>
             </select>
@@ -57,7 +51,7 @@
           </div>
           <div class="mb-3 mt-3">
             <label for="" class="form-label">Fecha de Nacimiento:</label>
-            <input type="date" class="form-control" id="" value="{{ cliente.fecha_nacimiento }}" name="fecha_nacimiento">
+            <input  type="date" class="form-control" id=""  value="{{ cliente.fecha_nacimiento|date:'Y-m-d' }}"  name="fecha_nacimiento">
           </div>
           <label>Foto</label>
           <strong><span> - actual: {{ cliente.foto }}</span></strong>

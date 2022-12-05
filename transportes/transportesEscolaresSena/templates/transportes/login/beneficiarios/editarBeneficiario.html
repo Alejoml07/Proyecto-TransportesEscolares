@@ -41,7 +41,7 @@
           </div>
           <div class="mb-3 mt-3">
             <label for="" class="form-label">Fecha de Nacimiento:</label>
-            <input type="date" class="form-control" id="" value="{{ beneficiario.fecha_nacimiento }}" name="fecha_nacimiento">
+            <input type="date" class="form-control" id="" value="{{ beneficiario.fecha_nacimiento|date:'Y-m-d' }}" name="fecha_nacimiento">
           </div>
           
          
