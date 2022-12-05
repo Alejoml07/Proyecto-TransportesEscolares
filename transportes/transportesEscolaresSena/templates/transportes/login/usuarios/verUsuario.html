@@ -116,7 +116,7 @@
                             {%for t in comentarios %}
                             <tbody>
                               <tr>
-                                <td {% if cli.nombre == t.cliente.nombre %}{% endif %} >{{t.cliente.nombre}}</td>
+                                <td {% if cli.nombre == t.cliente.nombre %}{% endif %} >{{t.desc}}</td>
                               </tr>
                             </tbody>
                             {%endfor%}
