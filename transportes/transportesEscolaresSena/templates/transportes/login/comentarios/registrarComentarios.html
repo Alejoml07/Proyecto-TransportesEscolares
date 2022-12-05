@@ -20,7 +20,9 @@
           <select class="form-control" name="cliente">
               <option value="">Seleccione:</option>
               {% for c in cli %}
+                {%if c.rol == 'P'%}
                   <option value="{{ c.id }}" >{{ c.id}} - {{ c.nombre }}</option>
+                {% endif %}
               {% endfor %}
           </select>
         </div>

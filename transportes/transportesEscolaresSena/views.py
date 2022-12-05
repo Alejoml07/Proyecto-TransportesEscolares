@@ -477,7 +477,7 @@ def guardarComentarios(request):
     except Exception as e:
         messages.error(request, f"Error: {e}")
     
-    return redirect('transportes:listarComentarios')
+    return redirect('transportes:index')
 
 '''Retorna al formulario con la informacion del comentario y es editable'''
 def formularioEditarComentarios(request, id):
