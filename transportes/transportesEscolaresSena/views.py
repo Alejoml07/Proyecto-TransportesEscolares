@@ -149,6 +149,8 @@ def guardarUsuario(request):
     Returns:
         
     """
+    login = request.session.get('logueo', False)
+
     try:
         if request.method == "POST":
             if request.FILES:
@@ -175,8 +177,10 @@ def guardarUsuario(request):
 
     except Exception as e:
         messages.error(request, f"Error: {e}")
-    
-    return redirect('transportes:indexPrimary')
+    if login:
+        return redirect('transportes:listarUsuario')
+    else:
+        return redirect('transportes:indexPrimary')
         
 
 '''Retorna a un template con la información de un usuario especifico'''
