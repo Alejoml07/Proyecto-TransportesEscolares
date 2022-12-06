@@ -103,7 +103,7 @@
                         <div class="col-md-12"><label class="labels">Correo</label>
                           <input  type="text" class="form-control" value="{{ cli.correo }}" name="correo"></div>
                         <div class="col-md-12"><label class="labels">Fecha de Nacimiento</label>
-                          <input  type="date" class="form-control" value="{{ cli.fecha_nacimiento }}" name="fecha_nacimiento"></div>
+                          <input  type="date" class="form-control" value="{{ cli.fecha_nacimiento|date:'Y-m-d' }}" name="fecha_nacimiento"></div>
                     </div><br><br>
                     
                      

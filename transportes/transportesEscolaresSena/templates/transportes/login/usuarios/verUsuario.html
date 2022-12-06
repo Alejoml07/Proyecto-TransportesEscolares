@@ -103,7 +103,7 @@
                         <div class="col-md-12"><label class="labels">Address Line 2</label>
                           <input readonly type="text" class="form-control" value="{{ cli.correo }}"></div>
                         <div class="col-md-12"><label class="labels">Postcode</label>
-                          <input readonly type="text" class="form-control" value="{{ cli.fecha_nacimiento }}"></div>
+                          <input readonly type="text" class="form-control" value="{{ cli.fecha_nacimiento|date:'Y-m-d' }}"></div>
                     </div><br><br>
                     
                       <table class="table table-hover">
