@@ -37,22 +37,24 @@
             <div id="respuesta">
         {%for t in datos %}
         <div class="container">
-            <div class="card mb-3" style="max-width: 1200px; max-height: 1000px;" >
-                <div class="row g-0">
-                  <div class="col-md-4">
-                    <img src="{{t.foto.url}}" class="img-fluid rounded-start" alt="...">
-                  </div>
-                  <div class="col-md-8">
-                    
-                    <div class="card-body">
-                      <h5 class="card-title">{{t.nombre}} {{t.apellido}}</h5>
-                      <p class="card-text">Correo: {{t.correo}}</p>
-                      <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
-                    </div>
-                  </div>
-                </div>
-              </div>
+          <div class="card text-center">
+            <div class="card-header">
+              Proveedor
             </div>
+            <div class="card-body">
+              <h5 class="card-title">{{t.nombre}} {{t.apellido}}</h5>
+              <p class="card-text">Correo: {{t.correo}}</p>
+              <p class="card-text">Direccion:{{t.direccion}}</p>
+              <p class="card-text">Documento: {{t.documento}}</p>
+              <p class="card-text">Fecha de Nacimiento: {{t.fecha_nacimiento}}</p>
+              <a class="btn btn-primary" href="{% url 'transportes:verUsuario' t.id %}">Ver</a>
+
+            </div>
+            <div class="card-footer text-muted">
+              Transporte
+            </div>
+          </div>
+        </div>
         {%endfor%}
         
         <p>Página {{ datos.number }} de {{ datos.paginator.num_pages }}.</p>

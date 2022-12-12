@@ -62,7 +62,9 @@
                   <li><a class="dropdown-item" href="{% url 'transportes:verLogueo' %}">Perfil</a></li>
                   <li><hr class="dropdown-divider"></li>
                   <li><a class="dropdown-item" href="{% url 'transportes:listarBeneficiario' %}">Beneficiario</a></li>
-
+                  {% if request.session.logueo.2 == 'C' %}
+                  <li><a class="dropdown-item" href="{% url 'transportes:listarPeticionesCli' %}">Peticiones</a></li>
+                  {% endif %}
                   <li><a class="dropdown-item" href="{% url 'transportes:logout' %}">Sign out</a></li>
 
                 </ul>
@@ -74,20 +76,25 @@
       </nav>
     <form action="{%url 'transportes:actualizarUsuario'%}" method="post">
       {%csrf_token%}
+      {% if messages %}
+
+        {% for message in messages %}
+            <div class="alert alert-{%if message.tags%}{{message.tags}}{%else%}dark{%endif%}" role = "alert">{{message}}</div>
+        {% endfor %}
+
+      {% endif %}
       <input type="hidden" name="id" value="{{ cli.id }}"/>
       <div class="container rounded bg-white mt-5 mb-5">
         <div class="row">
             <div class="col-md-3 border-right">
                 <div class="d-flex flex-column align-items-center text-center p-3 py-5">
-                  <img class="rounded-circle mt-5" width="150px" id= "foto" src="{{cli.foto.url}}">
-                  <input type="file" name="foto" class="form-control" accept="image/*" /><br>
-                  <span class="font-weight-bold">{{ cli.nombre }}</span>
-                  <span class="text-black-50">{{ cli.rol }}</span><span> </span></div>
+                  <span class="font-weight-bold"></span>
+                  <span class="text-black-50"></span><span> </span></div>
             </div>
             <div class="col-md-5 border-right">
                 <div class="p-3 py-5">
                     <div class="d-flex justify-content-between align-items-center mb-3">
-                        <h4 class="text-right">Profile Settings</h4>
+                        <h4 class="text-right">Perfil</h4>
                     </div>
                     <div class="row mt-2">
                         <div class="col-md-6"><label class="labels">Nombre</label>
@@ -96,6 +103,11 @@
                           <input  type="text" class="form-control" value="{{ cli.apellido }}" name="apellido"></div>
                     </div>
                     <div class="row mt-3">
+                      <div class="col-md-12"><label class="labels">Usuario</label>
+                        <input type="text" class="form-control" value="{{ cli.usuario }}"  name="usuario"></div>
+                          <input type="hidden" class="form-control" value="{{ cli.clave }}"  name="clave"></div>
+                          <div class="col-md-12"><label class="labels">Rol</label>
+                            <input readonly type="text" class="form-control" value="{{ cli.rol }}"  name="rol"></div>
                         <div class="col-md-12"><label class="labels">Documento</label>
                           <input type="text" class="form-control" value="{{ cli.documento }}"  name="documento"></div>
                         <div class="col-md-12"><label class="labels">Direccion</label>
@@ -104,10 +116,8 @@
                           <input  type="text" class="form-control" value="{{ cli.correo }}" name="correo"></div>
                         <div class="col-md-12"><label class="labels">Fecha de Nacimiento</label>
                           <input  type="date" class="form-control" value="{{ cli.fecha_nacimiento|date:'Y-m-d' }}" name="fecha_nacimiento"></div>
-                    </div><br><br>
+                    </div>
                     
-                     
-                        
                     <button type="submit" class="btn btn-primary">Enviar</button>
                 </div>
             </div>

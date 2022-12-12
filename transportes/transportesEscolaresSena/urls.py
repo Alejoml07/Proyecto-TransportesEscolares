@@ -54,12 +54,16 @@ urlpatterns = [
     #--------------------------Peticiones-----------------------------------
     path('listarPeticiones/', views.listarPeticiones, name = "listarPeticiones"),
     path('listarPeticionesProv/', views.listarPeticionesProv, name = "listarPeticionesProv"),
+    path('listarPeticionesAceptadas/', views.listarPeticionesAceptadas, name = "listarPeticionesAceptadas"),
+    path('listarPeticionesCli/', views.listarPeticionesCli, name = "listarPeticionesCli"),
     path('registrarPeticiones/', views.registrarPeticiones, name = "registrarPeticiones"),
     path('guardarPeticiones/', views.guardarPeticiones, name = "guardarPeticiones"),
     path('formularioEditarPeticiones/<int:id>', views.formularioEditarPeticiones, name = "formularioEditarPeticiones"),
     path('actualizarPeticiones/', views.actualizarPeticiones, name = "actualizarPeticiones"),
     path('eliminarPeticiones/<int:id>', views.eliminarPeticiones, name = "eliminarPeticiones"),
     path('buscarPeticiones/', views.buscarPeticiones, name="buscarPeticiones"),
+    path('boton/<int:id>', views.boton, name="boton"),
+    path('rechazar/<int:id>', views.rechazar, name="rechazar"),
 
     #--------------------------Vehiculo-----------------------------------
     path('listarVehiculo/', views.listarVehiculo, name = "listarVehiculo"),

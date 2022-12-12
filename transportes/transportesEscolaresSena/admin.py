@@ -7,12 +7,10 @@ from .models import Cliente,Beneficiarios,Comentarios,Servicios,Peticiones,Vehic
 # Register your models here.
 @admin.register(Cliente)
 class ClienteAdmin(admin.ModelAdmin):
-    list_display = ('id','nombre', 'apellido', 'correo', 'direccion', 'documento','fecha_nacimiento', 'usuario', 'clave', 'rol','foto', 'verFoto' ) 
+    list_display = ('id','nombre', 'apellido', 'correo', 'direccion', 'documento','fecha_nacimiento', 'usuario', 'clave', 'rol') 
     search_fields = ['id','nombre']
     
-    def verFoto(self, obj):
-        from django.utils.html import format_html
-        return format_html('<img src="{}" width="20%" />'.format(obj.foto.url))
+    
 
 @admin.register(Beneficiarios)
 class BeneficiariosAdmin(admin.ModelAdmin):
@@ -31,18 +29,21 @@ class SetviciosAdmin(admin.ModelAdmin):
 
 @admin.register(Peticiones)
 class PeticionesAdmin(admin.ModelAdmin):
-    list_display =  ('id','cliente', 'servicios',  'direccion', 'colegio', 'horario', 'comentario_add', )
+    list_display =  ('id','cliente', 'servicios', 'beneficiarios','clienteBeneficiario', 'direccion', 'colegio', 'horario', 'comentario_add','estado' )
     search_fields = ['id','cliente', 'servicios', ]
+
+    def clienteBeneficiario(self, obj):
+        return obj.beneficiarios.cliente
+
+
 
 
 @admin.register(Vehiculo)
 class VehiculoAdmin(admin.ModelAdmin):
-    list_display =  ('placa', 'marca', 'color', 'cliente', 'foto', 'verFoto' )
+    list_display =  ('placa', 'marca', 'color', 'cliente','capacidad','actual')
     search_fields = ['placa','cliente']
     
-    def verFoto(self, obj):
-        from django.utils.html import format_html
-        return format_html('<img src="{}" width="20%" />'.format(obj.foto.url))
+    
 
 
 

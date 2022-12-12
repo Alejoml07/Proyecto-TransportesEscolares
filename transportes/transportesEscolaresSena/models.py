@@ -19,7 +19,6 @@ class Cliente(models.Model):
         ('P', 'Proveedor'),
     )
     rol = models.CharField(max_length=100, choices=ROLES, default='C')
-    foto = models.ImageField(upload_to = 'transportes/fotos', default='transportes/fotos/default.webp')
 
 
     def __str__(self):
@@ -56,9 +55,11 @@ class Servicios (models.Model):
 class Peticiones(models.Model):
     cliente = models.ForeignKey(Cliente,on_delete = models.DO_NOTHING)
     servicios = models.ForeignKey(Servicios,on_delete = models.DO_NOTHING)
+    beneficiarios = models.ForeignKey(Beneficiarios,on_delete = models.DO_NOTHING)
     direccion = models.CharField(max_length= 100)
     colegio = models.CharField(max_length= 200)
     horario = models.CharField(max_length= 100)
+    estado = models.CharField(max_length= 100, default='Pendiente')
     comentario_add = models.CharField(max_length= 100, null=True,blank=True)
 
     def __str__(self):
@@ -69,8 +70,10 @@ class Vehiculo (models.Model):
     placa = models.CharField(max_length= 100)
     marca = models.CharField(max_length= 100)
     color = models.CharField(max_length= 250)
-    cliente = models.ForeignKey(Cliente,on_delete = models.DO_NOTHING)
-    foto = models.ImageField(upload_to = 'transportes/fotos', default='transportes/fotos/default.webp')
+    cliente = models.OneToOneField(Cliente,on_delete = models.DO_NOTHING)
+    capacidad = models.PositiveIntegerField()
+    actual = models.PositiveIntegerField(default=0)
+
     
     
     def __str__(self):

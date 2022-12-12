@@ -26,12 +26,12 @@
                       <strong>{{request.session.logueo.0}}</strong>
                     </a>
                     <ul class="dropdown-menu dropdown-menu-dark text-small shadow" aria-labelledby="dropdownUser1">
-                      <li><a class="dropdown-item" href="#">Perfil</a></li>
+                      <li><a class="dropdown-item" href="{% url 'transportes:indexProveedor' %}">Perfil</a></li>
                       <li><hr class="dropdown-divider"></li>
                       <li><a class="dropdown-item" href="{% url 'transportes:listarComentariosProv' %}">Comentarios</a></li>
                       <li><a class="dropdown-item" href="{% url 'transportes:listarPeticionesProv' %}">Peticiones</a></li>
                       <li><a class="dropdown-item" href="{% url 'transportes:listarVehiculoProv' %}">Vehiculos</a></li>
-
+                      <li><a class="dropdown-item" href="{% url 'transportes:listarPeticionesAceptadas' %}">Aceptadas</a></li>
                       <li><a class="dropdown-item" href="{% url 'transportes:logout' %}">Sign out</a></li>
                     </ul>
                   </div>
@@ -62,12 +62,15 @@
             <thead>
                 <tr>
                     <th>ID</th>
-                    <th>cliente</th>
+                    <th>proveedor</th>
                     <th>servicios</th>
                     <th>direccion</th>
                     <th>colegio</th>
                     <th>horario</th>
                     <th>Comentario adicional</th>
+                    <th>beneficiario</th>
+                    <th>cliente</th>
+                    <th>estado</th>
                     <th>Operaciones</th>
 
 
@@ -85,11 +88,18 @@
                     <td>{{t.colegio}}</td>
                     <td>{{t.horario}}</td>
                     <td>{{t.comentario_add}}</td>
+                    <td>{{t.beneficiarios}}</td>
+                    <td>{{t.beneficiarios.cliente}}</td>
+                    <td>{{t.estado}}</td>
+
+
+
                     <td>
                         <div class="d-grid gap-2 d-md-block">
-                            <a class="btn btn-dark" href="{% url 'transportes:eliminarPeticiones' t.id %}">Eliminar</a>
 
-                            <a class="btn btn-info" href="{% url 'transportes:formularioEditarPeticiones' t.id %}">Editar</a>
+                            <a class="btn btn-dark" href="{% url 'transportes:rechazar' t.id %}">Rechazar</a>
+                            <a class="btn btn-info" href="{% url 'transportes:boton' t.id %}">Aceptar</a>
+
                         </div>
                     </td>
 

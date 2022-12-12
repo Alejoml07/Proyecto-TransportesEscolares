@@ -34,12 +34,15 @@
             <thead>
                 <tr>
                     <th>ID</th>
-                    <th>cliente</th>
+                    <th>Proveedor</th>
                     <th>servicios</th>
                     <th>direccion</th>
                     <th>colegio</th>
                     <th>horario</th>
                     <th>Comentario adicional</th>
+                    <th>beneficiario</th>
+                    <th>cliente</th>
+                    <th>estado</th>
                     <th>Operaciones</th>
 
 
@@ -57,6 +60,12 @@
                     <td>{{t.colegio}}</td>
                     <td>{{t.horario}}</td>
                     <td>{{t.comentario_add}}</td>
+                    <td>{{t.beneficiarios}}</td>
+                    <td>{{t.beneficiarios.cliente}}</td>
+                    <td>{{t.estado}}</td>
+
+
+
                     <td>
                         <div class="d-grid gap-2 d-md-block">
                             <a class="btn btn-dark" href="{% url 'transportes:eliminarPeticiones' t.id %}">Eliminar</a>

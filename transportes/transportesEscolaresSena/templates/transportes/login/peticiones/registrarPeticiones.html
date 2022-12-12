@@ -17,7 +17,7 @@
         {%csrf_token%}
         <div class="mb-3 mt-3">
           <div class="mb-3 mt-3">
-            <label>Cliente</label>
+            <label>Proveedor</label>
             <select class="form-control" name="cliente">
                 <option value="">Seleccione:</option>
                 {% for c in cli %}
@@ -37,6 +37,15 @@
           </select>
           </div>
           <div class="mb-3 mt-3">
+            <label>Beneficiario</label>
+            <select class="form-control" name="beneficiario">
+                <option value="">Seleccione:</option>
+                {% for c in beneficiario %}
+                    <option value="{{ c.id }}">{{ c.id}} - {{ c.nombre }}</option>
+                {% endfor %}
+            </select>
+            </div>
+          <div class="mb-3 mt-3">
             <label for="" class="form-label">direccion:</label>
             <input type="text" class="form-control" id="email" placeholder="Ingrese direccion" name="direccion">
           </div>
@@ -51,6 +60,8 @@
           <div class="mb-3 mt-3">
             <label for="" class="form-label">Comentario adicional:</label>
             <input type="text" class="form-control" id="" placeholder="Ingrese Comentario adicional" name="comentario_add">
+          </div>
+            <input type="hidden" class="form-control" id="" value="Pendiente" name="estado">
           </div>
           
         

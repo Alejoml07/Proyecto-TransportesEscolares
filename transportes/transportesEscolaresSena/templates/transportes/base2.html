@@ -1,0 +1,56 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transportes Escolares</title>
+    <link href="{% static 'transportes/css/bootstrap.min.css' %}" rel="stylesheet">
+
+</head>
+<body>
+  <div style="background-color: grey;">
+    <nav class="navbar navbar-expand-lg navbar-light">
+        <div class="container">
+            <a href="{% url 'transportes:indexProveedor' %}"><img  src="../../../../static/transportes/assets/logo.png"  width="200px" height="200px" class="img-fluid rounded-start" alt="..." ></a>
+            <button class="navbar-toggler bg-white" type="button" data-toggle="collapse" data-bs-target="#miLista">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse justify-content-end" id="miLista">
+            <ul class="navbar-nav">
+              
+
+              <div class="dropdown">
+                <a href="#" class="d-flex align-items-center text-black text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
+                  <strong>{{request.session.logueo.0}}</strong>
+                </a>
+                <ul class="dropdown-menu dropdown-menu-dark text-small shadow" aria-labelledby="dropdownUser1">
+                  <li><a class="dropdown-item" href="{% url 'transportes:indexProveedor' %}">Perfil</a></li>
+                  <li><hr class="dropdown-divider"></li>
+                  <li><a class="dropdown-item" href="{% url 'transportes:listarComentariosProv' %}">Comentarios</a></li>
+                  <li><a class="dropdown-item" href="{% url 'transportes:listarPeticionesProv' %}">Peticiones</a></li>
+                  <li><a class="dropdown-item" href="{% url 'transportes:listarVehiculoProv' %}">Vehiculos</a></li>
+                  <li><a class="dropdown-item" href="{% url 'transportes:listarPeticionesAceptadas' %}">Aceptadas</a></li>
+
+                  <li><a class="dropdown-item" href="{% url 'transportes:logout' %}">Sign out</a></li>
+                </ul>
+              </div>
+              
+            </ul>
+          </div>
+        </div>
+      </nav>
+  </div>
+    </div>
+      <script src="{% static 'transportes/js/jquery-3.6.1.min.jss' %}"></script>
+      <script src="{% static 'transportes/js/popper.min.js' %}"></script>
+      <script src="{% static 'transportes/js/bootstrap.min.js' %}"></script>
+      <script src="{% static 'transportes/js/libreria.js' %}"></script>
+
+
+
+      {%block contenedor%}{%endblock%}
+
+</body>
+</html>

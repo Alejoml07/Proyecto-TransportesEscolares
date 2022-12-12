@@ -26,12 +26,13 @@
                       <strong>{{request.session.logueo.0}}</strong>
                     </a>
                     <ul class="dropdown-menu dropdown-menu-dark text-small shadow" aria-labelledby="dropdownUser1">
-                      <li><a class="dropdown-item" href="#">Perfil</a></li>
+                      <li><a class="dropdown-item" href="{% url 'transportes:indexProveedor' %}">Perfil</a></li>
                       <li><hr class="dropdown-divider"></li>
                       <li><a class="dropdown-item" href="{% url 'transportes:listarComentariosProv' %}">Comentarios</a></li>
                       <li><a class="dropdown-item" href="{% url 'transportes:listarPeticionesProv' %}">Peticiones</a></li>
                       <li><a class="dropdown-item" href="{% url 'transportes:listarVehiculoProv' %}">Vehiculos</a></li>
-
+                      <li><a class="dropdown-item" href="{% url 'transportes:listarPeticionesAceptadas' %}">Aceptadas</a></li>
+                      <li><hr class="dropdown-divider"></li>
                       <li><a class="dropdown-item" href="{% url 'transportes:logout' %}">Sign out</a></li>
                     </ul>
                   </div>

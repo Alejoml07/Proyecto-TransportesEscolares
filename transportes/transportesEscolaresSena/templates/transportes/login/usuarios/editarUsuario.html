@@ -29,6 +29,7 @@
             <label>Usuario</label>
             <input type="text" class="form-control" id="" value="{{ cliente.usuario }}" name="usuario">
           </div>
+            <input type="hidden" class="form-control" id="" value="{{ cliente.clave }}" name="clave">
           <div class="mb-3 mt-3">
             <label>Rol</label>
             <select value="{{ cliente.rol }}" name="rol" class="form-control">
@@ -53,9 +54,7 @@
             <label for="" class="form-label">Fecha de Nacimiento:</label>
             <input  type="date" class="form-control" id=""  value="{{ cliente.fecha_nacimiento|date:'Y-m-d' }}"  name="fecha_nacimiento">
           </div>
-          <label>Foto</label>
-          <strong><span> - actual: {{ cliente.foto }}</span></strong>
-          <input type="file" name="foto" class="form-control" accept="image/*" /><br>
+          
         
         <button type="submit" class="btn btn-primary">Enviar</button>
       </form>

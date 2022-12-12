@@ -1,4 +1,4 @@
-{%extends "transportes/base.html"%}
+{%extends "transportes/base2.html"%}
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
@@ -38,8 +38,9 @@
                     <th>placa</th>
                     <th>marca</th>
                     <th>color</th>
+                    <th>Capacidad</th>
+                    <th>Disponibilidad Actual</th>
                     <th>cliente</th>
-                    <th>foto</th>
                     <th>Operaciones</th>
 
 
@@ -54,10 +55,10 @@
                     <td>{{t.placa}}</td>
                     <td>{{t.marca}}</td>
                     <td>{{t.color}}</td>
+                    <td>{{t.capacidad}}</td>
+                    <td>{{t.actual}}</td>
                     <td>{{t.cliente}}</td>
-                    <td>
-                        <img src="{{t.foto.url}}" width="10%">
-                    </td>
+                    
                     <td>
                         <div class="d-grid gap-2 d-md-block">
                             <a class="btn btn-dark" href="{% url 'transportes:eliminarVehiculo' t.id %}">Eliminar</a>

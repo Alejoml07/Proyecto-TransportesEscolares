@@ -47,7 +47,6 @@
                     <th>direccion</th>
                     <th>documento</th>
                     <th>fecha_nacimiento</th>
-                    <th>foto</th>
                     <th>Operaciones</th>
 
 
@@ -65,9 +64,7 @@
                     <td>{{t.direccion}}</td>
                     <td>{{t.documento}}</td>
                     <td>{{t.fecha_nacimiento}}</td>
-                    <td>
-                      <img src="" width="10%">
-                  </td>
+                   
                     <td>
                         <div class="d-grid gap-2 d-md-block">
                             <a class="btn btn-dark" href="{% url 'transportes:eliminarUsuario' t.id %}">Eliminar</a>

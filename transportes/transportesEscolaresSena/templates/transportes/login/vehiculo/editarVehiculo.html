@@ -1,4 +1,4 @@
-{%extends "transportes/base.html"%}
+{%extends "transportes/base2.html"%}
 {% load static %}
 
 
@@ -39,9 +39,15 @@
             <label for="" class="form-label">color:</label>
             <input type="text" class="form-control" id="" value="{{ vehiculo.color }}" name="color">
           </div>
-          <label>Foto</label>
-          <strong><span> - actual: {{ vehiculo.foto }}</span></strong>
-          <input type="file" name="foto" class="form-control" accept="image/*" /><br>
+          <div class="mb-3 mt-3">
+            <label for="" class="form-label">Capacidad:</label>
+            <input type="number" class="form-control" id="" value="{{ vehiculo.capacidad }}" name="capacidad">
+          </div>
+          <div class="mb-3 mt-3">
+            <label for="" class="form-label">Disponibilidad actual:</label>
+            <input type="number" class="form-control" id="" value="{{ vehiculo.actual }}" name="actual">
+          </div>
+     
           
          
         

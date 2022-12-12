@@ -15,7 +15,7 @@
     <h3>Agregar Peticiones</h3>
     <form action="{%url 'transportes:actualizarPeticiones'%}" method="post">
         {%csrf_token%}
-        <input type="hidden" name="id" value="{{ peticiones.id }}"/>
+        <input type="number" name="id" value="{{peticiones.id}}"/>
         <div class="mb-3 mt-3">
           <label>Cliente</label>
           <select class="form-control" name="cliente">
@@ -35,6 +35,15 @@
           </select>
           </div>
           <div class="mb-3 mt-3">
+            <label>Beneficiario</label>
+            <select class="form-control" name="beneficiario">
+                <option value="">Seleccione:</option>
+                {% for c in beneficiario %}
+                    <option value="{{ c.id }}"{% if peticiones.beneficiarios.id == c.id %}selected=""{% endif %}>{{ c.id}} - {{ c.nombre }}</option>
+                {% endfor %}
+            </select>
+          </div>
+          <div class="mb-3 mt-3">
             <label for="" class="form-label">direccion:</label>
             <input type="text" class="form-control" id="" value="{{ peticiones.direccion }}" name="direccion">
           </div>
@@ -48,8 +57,13 @@
           </div>
           <div class="mb-3 mt-3">
             <label for="" class="form-label">Comentario adicional:</label>
-            <input type="text" class="form-control" id="" value="{{ peticiones.comentario_add }}" name="comentario_add">
+            <input type="text" class="form-control" id="" value="{{peticiones.comentario_add}}" name="comentario_add">
           </div>
+        </div>
+        <div class="mb-3 mt-3">
+          <label for="" class="form-label">Estado:</label>
+          <input type="text" class="form-control" id="" value="{{peticiones.estado}}" name="estado">
+        </div>
           
         
         <button type="submit" class="btn btn-primary">Enviar</button>

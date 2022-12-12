@@ -26,12 +26,13 @@
                       <strong>{{request.session.logueo.0}}</strong>
                     </a>
                     <ul class="dropdown-menu dropdown-menu-dark text-small shadow" aria-labelledby="dropdownUser1">
-                      <li><a class="dropdown-item" href="#">Perfil</a></li>
+                      <li><a class="dropdown-item" href="{% url 'transportes:indexProveedor' %}">Perfil</a></li>
                       <li><hr class="dropdown-divider"></li>
                       <li><a class="dropdown-item" href="{% url 'transportes:listarComentariosProv' %}">Comentarios</a></li>
                       <li><a class="dropdown-item" href="{% url 'transportes:listarPeticionesProv' %}">Peticiones</a></li>
                       <li><a class="dropdown-item" href="{% url 'transportes:listarVehiculoProv' %}">Vehiculos</a></li>
-
+                      <li><a class="dropdown-item" href="{% url 'transportes:listarPeticionesAceptadas' %}">Aceptadas</a></li>
+                      <li><hr class="dropdown-divider"></li>
                       <li><a class="dropdown-item" href="{% url 'transportes:logout' %}">Sign out</a></li>
                     </ul>
                   </div>
@@ -42,6 +43,7 @@
           </nav>
       </div>
     
+      <a class="btn btn-warning" href="{% url 'transportes:registrarVehiculo' %}">Agregar</a>
 
 
     {% if messages %}
@@ -66,8 +68,9 @@
                     <th>placa</th>
                     <th>marca</th>
                     <th>color</th>
+                    <th>Capacidad</th>
+                    <th>Disponibilidad Actual</th>
                     <th>cliente</th>
-                    <th>foto</th>
                     <th>Operaciones</th>
 
 
@@ -82,10 +85,10 @@
                     <td>{{t.placa}}</td>
                     <td>{{t.marca}}</td>
                     <td>{{t.color}}</td>
+                    <td>{{t.capacidad}}</td>
+                    <td>{{t.actual}}</td>
                     <td>{{t.cliente}}</td>
-                    <td>
-                        <img src="{{t.foto.url}}" width="10%">
-                    </td>
+                    
                     <td>
                         <div class="d-grid gap-2 d-md-block">
                             <a class="btn btn-dark" href="{% url 'transportes:eliminarVehiculo' t.id %}">Eliminar</a>
